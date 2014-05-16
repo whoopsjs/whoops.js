@@ -8,13 +8,26 @@ fs.readFile('testfile.js', 'utf8', function(err, input) {
         strictSemicolons: true
     };
     var result = acorn.parse(input, options);
-    // console.log(pd.json(result));
+    console.log(pd.json(result));
 
     var variables = {};
     var visitors = {
         ExpressionStatement: function(node){
-            value = node.expression.right.value || variables[node.expression.right.name];
-            variables[node.expression.left.name] = value;
+            // console.log(pd.json(node));
+            switch (node.expression.type) {
+            case 'CallExpression':
+                break;
+            case 'AssignmentExpression':
+                var value = node.expression.right.value || variables[node.expression.right.name];
+                var name = node.expression.left.name;
+                if (name in variables){
+                    variables[name] = value;
+                }
+                else {
+                    console.warn('Assignment to undeclared variable ' + name + ' at ' + node.start);
+                }
+                break;
+            }
         },
         VariableDeclaration: function(node) {
             node.declarations.forEach(function(declaration){

@@ -12,7 +12,7 @@ fs.readFile('testfile.js', 'utf8', function(err, input) {
 
     var variables = {};
     var visitors = {
-        ExpressionStatement: function(node, state){
+        ExpressionStatement: function(node){
             value = node.expression.right.value || variables[node.expression.right.name];
             variables[node.expression.left.name] = value;
         },

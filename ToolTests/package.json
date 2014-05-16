@@ -1,0 +1,11 @@
+{
+  "name": "ToolTests",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "dependencies": {
+    "acorn": "^0.5.0",
+    "pretty-data": "^0.40.0"
+  }
+}

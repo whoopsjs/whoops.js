@@ -1,0 +1,9 @@
+{
+  "name": "ControlFlowGraph",
+  "main": "ControlFlowGraph.js",
+  "dependencies": {
+    "acorn": "^0.5.0",
+    "pretty-data": "^0.40.0"
+  },
+  "devDependencies": {}
+}

@@ -2,10 +2,13 @@
 // var b = "marple";
 // a = b;
 a = 3;
-if (a === c) {
-  a = 4;
-} else {
-  b = 3;
+// if (a === c) {
+//     a = 4;
+// } else if (b === d) {
+//     b = 3;
+// }
+if (true) {
+    f = g;
 }
 //
 // while (a < 5) {

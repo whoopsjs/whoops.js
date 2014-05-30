@@ -25,8 +25,12 @@ fs.readFile('testfile.js', 'utf8', function (err, input) {
             var consequentEnd = state.previous;
             state.previous = [];
             fillNode(node, state, nodes);
-            c(node.alternate, state);
+
+            if (node.alternate !== null) {
+                c(node.alternate, state);
+            }
             state.previous = state.previous.concat(consequentEnd);
+
         },
         ExpressionStatement: function (node, state, c) {
             fillNode(node, state, nodes);
@@ -38,6 +42,7 @@ fs.readFile('testfile.js', 'utf8', function (err, input) {
     walk.recursive(ast, {}, functions);
 
     console.log(nodes);
+    // console.log(pd.json(ast));
 });
 
 function fillNode(node, state, nodes) {

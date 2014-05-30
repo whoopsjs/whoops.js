@@ -1,9 +1,9 @@
 var acorn = require('acorn'),
-    walk  = require('acorn/util/walk.js'),
-    fs    = require('fs'),
-    pd    = require('pretty-data').pd;
+    walk = require('acorn/util/walk.js'),
+    fs = require('fs'),
+    pd = require('pretty-data').pd;
 
-fs.readFile('testfile.js', 'utf8', function(err, input) {
+fs.readFile('testfile.js', 'utf8', function (err, input) {
     var options = {
         strictSemicolons: true
     };
@@ -19,13 +19,19 @@ fs.readFile('testfile.js', 'utf8', function(err, input) {
 
             fillNode(node, state, nodes);
         },
-        // IfStatement: function(node, state, c) {
-        //
-        // },
-        ExpressionStatement: function(node, state, c){
+        IfStatement: function (node, state, c) {
+            fillNode(node, state, nodes);
+            c(node.consequent, state);
+            var consequentEnd = state.previous;
+            state.previous = [];
+            fillNode(node, state, nodes);
+            c(node.alternate, state);
+            state.previous = state.previous.concat(consequentEnd);
+        },
+        ExpressionStatement: function (node, state, c) {
             fillNode(node, state, nodes);
         },
-        VariableDeclaration: function(node, state, c){
+        VariableDeclaration: function (node, state, c) {
             fillNode(node, state, nodes);
         }
     };
@@ -37,17 +43,23 @@ fs.readFile('testfile.js', 'utf8', function(err, input) {
 function fillNode(node, state, nodes) {
     node.previous = node.previous || [];
     node.next = node.next || [];
+    state.previous = state.previous || [];
+
     node.id = node.id || nodes.length;
-    nodes[node.id] = node;
-
-    if (state.previous !== undefined) {
-        node.previous.push(state.previous);
+    if (node.id == nodes.length) {
+        nodes.push(node);
     }
-    state.previous = node.id;
 
-    node.previous.forEach(function(id){
+    state.previous.forEach(function (previous) {
+        if (previous !== undefined) {
+            node.previous.push(previous);
+        }
+    });
+    state.previous = [node.id];
+
+    node.previous.forEach(function (id) {
         // console.log(nodes[id].next);
-        if (nodes[id].next.indexOf(node.id) === -1){
+        if (nodes[id].next.indexOf(node.id) === -1) {
             nodes[id].next.push(node.id);
         }
     });

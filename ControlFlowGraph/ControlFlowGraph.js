@@ -13,10 +13,7 @@ fs.readFile('testfile.js', 'utf8', function (err, input) {
     var functions = {
         WhileStatement: function (node, state, c) {
             fillNode(node, state, nodes);
-
             c(node.body, state);
-            //node.next = node.body.body[0].id;
-
             fillNode(node, state, nodes);
         },
         IfStatement: function (node, state, c) {
@@ -25,12 +22,10 @@ fs.readFile('testfile.js', 'utf8', function (err, input) {
             var consequentEnd = state.previous;
             state.previous = [];
             fillNode(node, state, nodes);
-
             if (node.alternate !== null) {
                 c(node.alternate, state);
             }
             state.previous = state.previous.concat(consequentEnd);
-
         },
         ExpressionStatement: function (node, state, c) {
             fillNode(node, state, nodes);

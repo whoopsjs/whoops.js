@@ -1,5 +1,5 @@
 var program = require('commander'),
-  cfg = require('controlFlowGraph'),
+  cfg = require('../ControlFlowGraph'),
   fs = require('fs'),
   async = require('async');
 
@@ -19,9 +19,8 @@ program
       if (err)
         console.error(err);
       else {
-        async.applyEach(workers, graph, function () {
-          console.log('all workers have been completed');
-        });
+        async.applyEachSeries(workers, graph, function () {});
+        console.log('all workers have been completed');
       }
     });
   });

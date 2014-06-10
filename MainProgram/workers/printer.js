@@ -1,3 +1,3 @@
 module.exports = function (graph) {
-  console.log(graph);
+  console.log(graph.body);
 };

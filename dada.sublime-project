@@ -1,0 +1,49 @@
+{
+  "settings":
+  {
+    "tab_size": 2,
+    "translate_tabs_to_spaces": true,
+    "trim_trailing_white_space_on_save": true
+  },
+  "build_systems": [
+    {
+      "cmd": ["nodejs", ".", "testfile.js"],
+      "name": "nodejs . testfile.js",
+      "selector": "source.js",
+      "working_dir": "${project_path:${folder}}/MainProgram"
+    }
+  ],
+  "folders":
+  [
+    {
+      "name": "Settings (project folder)",
+      "path": ".",
+      "folder_exclude_patterns": [
+        "MainProgram",
+        "ControlFlowGraph",
+        "ToolTests"
+      ]
+    },
+    {
+      "path": "MainProgram",
+      "folder_exclude_patterns":
+      [
+        "node_modules"
+      ]
+    },
+    {
+      "path": "ControlFlowGraph",
+      "folder_exclude_patterns":
+      [
+        "node_modules"
+      ]
+    },
+    {
+      "path": "ToolTests",
+      "folder_exclude_patterns":
+      [
+        "node_modules"
+      ]
+    }
+  ]
+}

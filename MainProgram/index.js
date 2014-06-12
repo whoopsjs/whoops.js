@@ -24,14 +24,25 @@ program
       if (err) {
         console.error(err);
       } else {
-        //async.applyEachSeries(workers, graph, function () {});
+        var tree = {
+          meta: {
+            version: 1
+          },
+          data: {
+            controlFlowGraph: graph,
+            problems: []
+          }
+        }
+        //async.applyEachSeries(workers, tree, function () {});
         for (var i = workers.length - 1; i >= 0; i--) {
-          workers[i].call(null, graph);
+          workers[i].call(null, tree);
         };
         console.log("All workers have finished.");
+        console.log("Problems:")
+        console.log(util.inspect(tree.data.problems, {showHidden: false, depth: null}));
         if (program.showGraph) {
           console.log("Graph:")
-          console.log(util.inspect(graph, {showHidden: false, depth: null}));
+          console.log(util.inspect(tree.data.controlFlowGraph, {showHidden: false, depth: null}));
         };
       }
     });

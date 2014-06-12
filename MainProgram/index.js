@@ -1,7 +1,8 @@
 var program = require('commander'),
   cfg = require('../ControlFlowGraph'),
   fs = require('fs'),
-  async = require('async');
+  async = require('async'),
+  util = require('util');
 
 var workers = [];
 
@@ -20,7 +21,8 @@ program
         console.error(err);
       else {
         async.applyEachSeries(workers, graph, function () {});
-        console.log('all workers have been completed');
+        console.log('all workers have been completed - graph:');
+        console.log(util.inspect(graph, {showHidden: false, depth: null}));
       }
     });
   });

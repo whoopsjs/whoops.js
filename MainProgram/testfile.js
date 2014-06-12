@@ -26,3 +26,6 @@ for (var i = 0; i < 100; i++) {
 }
 
 // a = 6;
+
+var evil = "alert('warning')";
+eval(evil);

@@ -13,9 +13,13 @@ if (fs.existsSync('./workers')) {
 }
 
 program
+  .option('-g, --show-graph', 'Print the full graph');
+
+program
   .command('*')
   .description('inspect the input file')
   .action(function (input) {
+    console.log('Defence against the dark arts: ' + input);
     cfg(input, function (err, graph) {
       if (err)
         console.error(err);
@@ -24,8 +28,11 @@ program
           workers[i].call(null, graph);
         };
         //async.applyEachSeries(workers, graph, function () {});
-        console.log('all workers have been completed - graph:');
-        console.log(util.inspect(graph, {showHidden: false, depth: null}));
+        console.log("All workers have finished.");
+        if (program.showGraph) {
+          console.log("Graph:")
+          console.log(util.inspect(graph, {showHidden: false, depth: null}));
+        };
       }
     });
   });

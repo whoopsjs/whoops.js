@@ -1,8 +1,8 @@
-var program = require('commander'),
-  cfg = require('../ControlFlowGraph'),
-  fs = require('fs'),
-  async = require('async'),
-  util = require('util');
+var program = require('commander');
+var cfg = require('../ControlFlowGraph');
+var fs = require('fs');
+var async = require('async');
+var util = require('util');
 
 var workers = [];
 
@@ -21,13 +21,13 @@ program
   .action(function (input) {
     console.log('Defence against the dark arts: ' + input);
     cfg(input, function (err, graph) {
-      if (err)
+      if (err) {
         console.error(err);
-      else {
+      } else {
+        //async.applyEachSeries(workers, graph, function () {});
         for (var i = workers.length - 1; i >= 0; i--) {
           workers[i].call(null, graph);
         };
-        //async.applyEachSeries(workers, graph, function () {});
         console.log("All workers have finished.");
         if (program.showGraph) {
           console.log("Graph:")
@@ -39,5 +39,6 @@ program
 
 
 program.parse(process.argv);
-if (program.args.length < 1)
+if (program.args.length < 1) {
   program.help();
+}

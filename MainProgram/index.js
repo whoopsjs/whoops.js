@@ -13,14 +13,14 @@ if (fs.existsSync('./workers')) {
 }
 
 program
-  .option('-g, --show-graph', 'Print the full graph');
+  .option('-g, --show-graph', 'Print the full control flow graph');
 
 program
   .command('*')
   .description('inspect the input file')
   .action(function (input) {
     console.log('Defence against the dark arts: ' + input);
-    cfg(input, function (err, graph) {
+    cfg(input, function (err, cfg) {
       if (err) {
         console.error(err);
       } else {
@@ -29,7 +29,7 @@ program
             version: 1
           },
           data: {
-            controlFlowGraph: graph,
+            cfg: cfg,
             problems: []
           }
         }
@@ -42,7 +42,7 @@ program
         console.log(util.inspect(tree.data.problems, {showHidden: false, depth: null}));
         if (program.showGraph) {
           console.log("Graph:")
-          console.log(util.inspect(tree.data.controlFlowGraph, {showHidden: false, depth: null}));
+          console.log(util.inspect(tree.data.cfg, {showHidden: false, depth: null}));
         };
       }
     });

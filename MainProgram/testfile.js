@@ -48,66 +48,86 @@ eval("console.log(\"" + userControlledValue + "\");");
 // Example:       Function("jsCode"+usercontrolledVal ) , 
 //                Function("arg","arg2","jsCode"+usercontrolledVal )
 // TODO does 'Function(String)' work this way?
+/*
 (Function(userControlledValue) {
     console.log(userControlledValue);
 }());
 (Function("arg", "arg2", userControlledValue) {
     console.log(userControlledValue);
 }());
+*/
 
 // Function Name: setTimeout
 // Argument:      first IIF it is a string
 // Browser:       All
 // Example:       setTimeout("jsCode"+usercontrolledVal ,timeMs)
+/*
 setTimeout("console.log(\"" + userControlledValue + "\");", 1000);
+*/
 
 // Function Name: setInterval
 // Argument:      first IIF it is a string
 // Browser:       All
 // Example:       setInterval("jsCode"+usercontrolledVal ,timMs)
+/*
 setInterval("console.log(\"" + userControlledValue + "\");", 1000);
+*/
 
 // Function Name: setImmediate
 // Argument:      first IIF it is a string
 // Browser:       IE 10+
 // Example:       setImmediate("jsCode"+usercontrolledVal )
+/*
 setImmediate("console.log(\"" + userControlledValue + "\");");
+*/
 
 // Function Name: execScript
 // Argument:      first
 // Browser:       IE 6+
 // Example:       execScript("jsCode"+usercontrolledVal ,"JScript")
+/*
 execScript("console.log(\"" + userControlledValue + "\");", "JScript");
+*/
 
 // Function Name: crypto.generateCRMFRequest
 // Argument:      5th
 // Browser:       Firefox 2+
 // Example:       crypto.generateCRMFRequest('CN=0',0,0,null,'jsCode'+usercontrolledVal,384,null,'rsa-dual-use')
+/*
 crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlledValue + "\");", 384, null, "rsa-dual-use");
+*/
 
 // Function Name: ScriptElement.src
 // Argument:      assignedValue
 // Browser:       All
 // Example:       script.src = usercontrolledVal
+/*
 scriptDOMElement.src = userControlledValue;
+*/
 
 // Function Name: ScriptElement.text
 // Argument:      assignedValue
 // Browser:       Explorer
 // Example:       script.text = 'jsCode'+usercontrolledVal
+/*
 scriptDOMElement.text = "console.log(\"" + userControlledValue + "\");";
+*/
 
 // Function Name: ScriptElement.textContent
 // Argument:      assignedValue
 // Browser:       All but IE
 // Example:       script.textContent = 'jsCode'+usercontrolledVal
+/*
 scriptDOMElement.textContent = "console.log(\"" + userControlledValue + "\");";
+*/
 
 // Function Name: ScriptElement.innerText
 // Argument:      assignedValue
 // Browser:       All but Firefox
 // Example:       script.innerText = 'jsCode'+usercontrolledVal
+/*
 scriptDOMElement.innerText = "console.log(\"" + userControlledValue + "\");";
+*/
 
 // Function Name: anyTag.onEventName
 // Argument:      assignedValue
@@ -116,6 +136,7 @@ scriptDOMElement.innerText = "console.log(\"" + userControlledValue + "\");";
 // Note:          List compiled from
 //                 https://developer.mozilla.org/en-US/docs/Web/Reference/Events
 //                 using using only non-deprecated standard events
+/*
 aDOMElement.onabort = "console.log(\"" + userControlledValue + "\");";
 aDOMElement.onafterprint = "console.log(\"" + userControlledValue + "\");";
 aDOMElement.onanimationend = "console.log(\"" + userControlledValue + "\");";
@@ -246,3 +267,4 @@ aDOMElement.onvisibilitychange = "console.log(\"" + userControlledValue + "\");"
 aDOMElement.onvolumechange = "console.log(\"" + userControlledValue + "\");";
 aDOMElement.onwaiting = "console.log(\"" + userControlledValue + "\");";
 aDOMElement.onwheel = "console.log(\"" + userControlledValue + "\");";
+*/

@@ -20,7 +20,10 @@ program
       if (err)
         console.error(err);
       else {
-        async.applyEachSeries(workers, graph, function () {});
+        for (var i = workers.length - 1; i >= 0; i--) {
+          workers[i].call(null, graph);
+        };
+        //async.applyEachSeries(workers, graph, function () {});
         console.log('all workers have been completed - graph:');
         console.log(util.inspect(graph, {showHidden: false, depth: null}));
       }

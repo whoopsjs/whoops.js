@@ -1,4 +1,5 @@
 module.exports = {
+  compare: compare,
   expressions: function (cfg, pattern, iterator) {
     expressionWalker(cfg.body, function(node) {
       if (compare(node, pattern)) {
@@ -21,7 +22,7 @@ var compare = function(node, pattern) {
   }
   for (var p in pattern) {
     if (pattern.hasOwnProperty(p)) {
-      if(!node.hasOwnProperty(p) || typeof pattern[p] !== typeof node[p] || !compare(node[p], pattern[p])) {
+      if(!node.hasOwnProperty(p) || typeof node[p] !== typeof pattern[p] || !compare(node[p], pattern[p])) {
         return false;
       }
     }

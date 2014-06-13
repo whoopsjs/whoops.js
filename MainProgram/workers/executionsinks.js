@@ -22,3 +22,5 @@ setInterval:
 *.CallExpression.callee.name
 Func (that will be executet): *.CallExpression.arguments.Literal.name
 Time: *.CallExpression.arguments.Literal.value
+
+*/

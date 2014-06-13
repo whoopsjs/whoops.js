@@ -22,7 +22,6 @@
       "folder_exclude_patterns": [
         "MainProgram",
         "ControlFlowGraph",
-        "TreePatternMatcher",
         "ToolTests"
       ]
     },
@@ -35,13 +34,6 @@
     },
     {
       "path": "ControlFlowGraph",
-      "folder_exclude_patterns":
-      [
-        "node_modules"
-      ]
-    },
-    {
-      "path": "TreePatternMatcher",
       "folder_exclude_patterns":
       [
         "node_modules"

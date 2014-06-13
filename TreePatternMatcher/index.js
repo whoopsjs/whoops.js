@@ -9,7 +9,7 @@ module.exports = {
   }
 };
 
-var compare = function(node, pattern) {
+function compare(node, pattern) {
   if (node === pattern) {
       return true;
   }
@@ -30,7 +30,7 @@ var compare = function(node, pattern) {
   return true;
 }
 
-var expressionWalker = function(body, iterator) {
+function expressionWalker(body, iterator) {
   for (var node in body) {
     iterator(node);
     // TODO find every sub expressions body and walk over it with expressionWalker(subexpressionsbody, pattern, iterator);

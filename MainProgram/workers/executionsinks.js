@@ -1,24 +1,21 @@
-var tpm = require('../../TreePatternMatcher');
+var walk = require('acorn/util/walk');
 
 module.exports = function (tree) {
-  tpm.expressions(tree.data.cfg, {
-    "type": "CallExpression",
-    "callee":
-    {
-      "type": "Identifier",
-      "name": "eval"
+  walk.recursive(tree.data.cfg, {}, {
+    CallExpression: function (node, state, c) {
+      if (node.callee.name === 'eval') {
+        tree.data.problems.push({
+          "type": "risk",
+          "message": "using eval() is not safe",
+          "weight": 1,
+          "position":
+          {
+            "start": node.start,
+            "end": node.end
+          }
+        });
+      };
     }
-  }, function(node) {
-    tree.data.problems.push({
-      "type": "risk",
-      "message": "using eval() is not safe",
-      "weight": 1,
-      "position":
-      {
-        "start": node.start,
-        "end": node.end
-      }
-    });
   });
 };
 

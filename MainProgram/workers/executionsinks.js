@@ -1,16 +1,12 @@
-//var tpm = require('../TreePatternMatcher');
+var tpm = require('../../TreePatternMatcher');
 
 module.exports = function (tree) {
-  /*tpm(tree.data.cfg, {
-    "type": "ExpressionStatement",
-    "expression":
+  tpm.expressions(tree.data.cfg, {
+    "type": "CallExpression",
+    "callee":
     {
-      "type": "CallExpression",
-      "callee":
-      {
-        "type": "Identifier",
-        "name": "eval"
-      }
+      "type": "Identifier",
+      "name": "eval"
     }
   }, function(node) {
     tree.data.problems.push({
@@ -23,7 +19,7 @@ module.exports = function (tree) {
         "end": node.end
       }
     });
-  });*/
+  });
 };
 
 /* NOTES

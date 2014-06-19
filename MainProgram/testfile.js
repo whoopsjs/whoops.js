@@ -40,21 +40,22 @@ eval("console.log(\"" + userControlledValue + "\");");
 // Argument:      first IIF it is a string
 // Browser:       All
 // Example:       setTimeout("jsCode"+usercontrolledVal ,timeMs)
+// Identifier:    {type: 'CallExpression', callee.name: 'setTimeout'}
 setTimeout("console.log(\"" + userControlledValue + "\");", 1000);
 
 // Function Name: setInterval
 // Argument:      first IIF it is a string
 // Browser:       All
 // Example:       setInterval("jsCode"+usercontrolledVal ,timMs)
+// Identifier:    {type: 'CallExpression', callee.name: 'setInterval'}
 setInterval("console.log(\"" + userControlledValue + "\");", 1000);
 
 // Function Name: setImmediate
 // Argument:      first IIF it is a string
 // Browser:       IE 10+
 // Example:       setImmediate("jsCode"+usercontrolledVal )
-/*
+// Identifier:    {type: 'CallExpression', callee.name: 'setImmediate'}
 setImmediate("console.log(\"" + userControlledValue + "\");");
-*/
 
 // Function Name: execScript
 // Argument:      first

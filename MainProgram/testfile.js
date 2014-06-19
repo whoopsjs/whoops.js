@@ -18,6 +18,7 @@ var aDOMElement = document.getElementById("element");
 // Argument:      first
 // Browser:       All
 // Example:       eval("jsCode"+usercontrolledVal )
+// Identifier:    {type: 'CallExpression', callee.name: 'eval'}
 eval("console.log(\"" + userControlledValue + "\");");
 
 // Function Name: Function

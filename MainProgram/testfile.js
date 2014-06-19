@@ -68,7 +68,7 @@ execScript("console.log(\"" + userControlledValue + "\");", "JScript");
 // Argument:      5th
 // Browser:       Firefox 2+
 // Example:       crypto.generateCRMFRequest('CN=0',0,0,null,'jsCode'+usercontrolledVal,384,null,'rsa-dual-use')
-// Identifier:    {type: 'CallExpression', callee.type: 'MemberExpression', object.name: 'crypto', property.name: 'generateCRMFRequest'}
+// Identifier:    {type: 'CallExpression', callee.type: 'MemberExpression', callee.object.name: 'crypto', callee.property.name: 'generateCRMFRequest'}
 crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlledValue + "\");", 384, null, "rsa-dual-use");
 
 // Function Name: ScriptElement.src

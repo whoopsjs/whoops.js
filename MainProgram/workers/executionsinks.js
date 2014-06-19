@@ -67,9 +67,38 @@ module.exports = function (tree) {
           }
         });
       }
+    },
+    AssignmentExpression: function (node, state, c) {
+      if (node.left.type === 'MemberExpression'
+          && isScriptDOMElement(node.left.object)
+          && node.left.property.name === 'src') {
+        tree.data.problems.push({
+          "type": "risk",
+          "message": "assigning a user controlled value to ScriptElement.src is not safe",
+          "weight": 1,
+          "position": {
+            "start": node.start,
+            "end": node.end
+          }
+        });
     }
   });
 };
+
+function isUserControlledValue(node) {
+  // TODO implement
+  return true;
+}
+
+function isScriptDOMElement(node) {
+  // TODO implement
+  return true;
+}
+
+function isADOMElement(node) {
+  // TODO implement
+  return true;
+}
 
 /* NOTES
 

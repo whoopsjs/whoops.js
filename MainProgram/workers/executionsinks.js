@@ -81,6 +81,7 @@ module.exports = function (tree) {
             "end": node.end
           }
         });
+      }
     }
   });
 };

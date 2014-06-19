@@ -43,7 +43,6 @@ module.exports = function (tree) {
             "end": node.end
           }
         });
-      }
       } else if (node.callee.name === 'execScript') {
         // TODO seconds argument === 'JScript'
         tree.data.problems.push({

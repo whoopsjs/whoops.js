@@ -15,7 +15,7 @@ var scriptDOMElement = document.getElementById("script");
 var anyDOMElement = document.getElementById("element");
 
 // Function Name: eval
-// Argument:      first
+// Argument:      CallExpression.arguments[0]
 // Browser:       All
 // Example:       eval("jsCode"+usercontrolledVal )
 // Identifier:    {type: 'CallExpression', callee.name: 'eval'}
@@ -37,7 +37,7 @@ eval("console.log(\"" + userControlledValue + "\");");
 */
 
 // Function Name: setTimeout
-// Argument:      first IIF it is a string
+// Argument:      CallExpression.arguments[0]
 // Browser:       All
 // Example:       setTimeout("jsCode"+usercontrolledVal ,timeMs)
 // Identifier:    {type: 'CallExpression', callee.name: 'setTimeout'}
@@ -51,49 +51,49 @@ setTimeout("console.log(\"" + userControlledValue + "\");", 1000);
 setInterval("console.log(\"" + userControlledValue + "\");", 1000);
 
 // Function Name: setImmediate
-// Argument:      first IIF it is a string
+// Argument:      CallExpression.arguments[0]
 // Browser:       IE 10+
 // Example:       setImmediate("jsCode"+usercontrolledVal )
 // Identifier:    {type: 'CallExpression', callee.name: 'setImmediate'}
 setImmediate("console.log(\"" + userControlledValue + "\");");
 
 // Function Name: execScript
-// Argument:      first
+// Argument:      CallExpression.arguments[0]
 // Browser:       IE 6+
 // Example:       execScript("jsCode"+usercontrolledVal ,"JScript")
 // Identifier:    {type: 'CallExpression', callee.name: 'execScript'}
 execScript("console.log(\"" + userControlledValue + "\");", "JScript");
 
 // Function Name: crypto.generateCRMFRequest
-// Argument:      5th
+// Argument:      CallExpression.arguments[0]
 // Browser:       Firefox 2+
 // Example:       crypto.generateCRMFRequest('CN=0',0,0,null,'jsCode'+usercontrolledVal,384,null,'rsa-dual-use')
 // Identifier:    {type: 'CallExpression', callee.type: 'MemberExpression', callee.object.name: 'crypto', callee.property.name: 'generateCRMFRequest'}
 crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlledValue + "\");", 384, null, "rsa-dual-use");
 
 // Function Name: ScriptElement.src
-// Argument:      assignedValue
+// Argument:      AssignmentExpression.right (== userControlledValue)
 // Browser:       All
 // Example:       script.src = usercontrolledVal
 // Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'src'}
 scriptDOMElement.src = userControlledValue;
 
 // Function Name: ScriptElement.text
-// Argument:      assignedValue
+// Argument:      AssignmentExpression.right (== userControlledValue)
 // Browser:       Explorer
 // Example:       script.text = 'jsCode'+usercontrolledVal
 // Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'text'}
 scriptDOMElement.text = "console.log(\"" + userControlledValue + "\");";
 
 // Function Name: ScriptElement.textContent
-// Argument:      assignedValue
+// Argument:      AssignmentExpression.right (== userControlledValue)
 // Browser:       All but IE
 // Example:       script.textContent = 'jsCode'+usercontrolledVal
 // Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'textContent'}
 scriptDOMElement.textContent = "console.log(\"" + userControlledValue + "\");";
 
 // Function Name: ScriptElement.innerText
-// Argument:      assignedValue
+// Argument:      AssignmentExpression.right (== userControlledValue)
 // Browser:       All but Firefox
 // Example:       script.innerText = 'jsCode'+usercontrolledVal
 // Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'innerText'}
@@ -109,7 +109,7 @@ scriptDOMElement.innerText = "console.log(\"" + userControlledValue + "\");";
 //                 using using only non-deprecated standard events
 
 
-//Identifier:     {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'anyDOMElement', left.property.name: 'on*'}
+// Identifier:     {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'anyDOMElement', left.property.name: 'on*'}
 /*
 anyDOMElement.onabort = "console.log(\"" + userControlledValue + "\");";
 anyDOMElement.onafterprint = "console.log(\"" + userControlledValue + "\");";

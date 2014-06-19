@@ -54,6 +54,18 @@ module.exports = function (tree) {
             "end": node.end
           }
         });
+      } else if (node.callee.type === 'MemberExpression'
+                 && node.callee.object.name === 'crypto'
+                 && node.callee.property.name === 'generateCRMFRequest') {
+        tree.data.problems.push({
+          "type": "risk",
+          "message": "using crypto.generateCRMFRequest() is not safe",
+          "weight": 1,
+          "position": {
+            "start": node.start,
+            "end": node.end
+          }
+        });
       }
     }
   });

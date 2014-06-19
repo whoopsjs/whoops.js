@@ -75,32 +75,30 @@ crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlled
 // Argument:      assignedValue
 // Browser:       All
 // Example:       script.src = usercontrolledVal
-// Identifier:    {type: 'VariableDeclarator', id.name: 'scriptDOMElement', property.name: 'src'}
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'src'}
 scriptDOMElement.src = userControlledValue;
 
 // Function Name: ScriptElement.text
 // Argument:      assignedValue
 // Browser:       Explorer
 // Example:       script.text = 'jsCode'+usercontrolledVal
-/*
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'text'}
 scriptDOMElement.text = "console.log(\"" + userControlledValue + "\");";
-*/
 
 // Function Name: ScriptElement.textContent
 // Argument:      assignedValue
 // Browser:       All but IE
 // Example:       script.textContent = 'jsCode'+usercontrolledVal
-/*
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'textContent'}
 scriptDOMElement.textContent = "console.log(\"" + userControlledValue + "\");";
-*/
 
 // Function Name: ScriptElement.innerText
 // Argument:      assignedValue
 // Browser:       All but Firefox
 // Example:       script.innerText = 'jsCode'+usercontrolledVal
-/*
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'innerText'}
 scriptDOMElement.innerText = "console.log(\"" + userControlledValue + "\");";
-*/
+
 
 // Function Name: anyTag.onEventName
 // Argument:      assignedValue

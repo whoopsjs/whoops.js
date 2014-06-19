@@ -95,7 +95,7 @@ function isScriptDOMElement(node) {
   return true;
 }
 
-function isADOMElement(node) {
+function isAnyDOMElement(node) {
   // TODO implement
   return true;
 }

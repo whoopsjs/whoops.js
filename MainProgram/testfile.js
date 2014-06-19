@@ -39,17 +39,17 @@ eval("console.log(\"" + userControlledValue + "\");");
 // Argument:      first IIF it is a string
 // Browser:       All
 // Example:       setTimeout("jsCode"+usercontrolledVal ,timeMs)
-/*
+
 setTimeout("console.log(\"" + userControlledValue + "\");", 1000);
-*/
+
 
 // Function Name: setInterval
 // Argument:      first IIF it is a string
 // Browser:       All
 // Example:       setInterval("jsCode"+usercontrolledVal ,timMs)
-/*
+
 setInterval("console.log(\"" + userControlledValue + "\");", 1000);
-*/
+
 
 // Function Name: setImmediate
 // Argument:      first IIF it is a string

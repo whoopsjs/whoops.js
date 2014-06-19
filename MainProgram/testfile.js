@@ -61,25 +61,22 @@ setImmediate("console.log(\"" + userControlledValue + "\");");
 // Argument:      first
 // Browser:       IE 6+
 // Example:       execScript("jsCode"+usercontrolledVal ,"JScript")
-/*
+// Identifier:    {type: 'CallExpression', callee.name: 'execScript'}
 execScript("console.log(\"" + userControlledValue + "\");", "JScript");
-*/
 
 // Function Name: crypto.generateCRMFRequest
 // Argument:      5th
 // Browser:       Firefox 2+
 // Example:       crypto.generateCRMFRequest('CN=0',0,0,null,'jsCode'+usercontrolledVal,384,null,'rsa-dual-use')
-/*
+// Identifier:    {type: 'CallExpression', callee.type: 'MemberExpression', object.name: 'crypto', property.name: 'generateCRMFRequest'}
 crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlledValue + "\");", 384, null, "rsa-dual-use");
-*/
 
 // Function Name: ScriptElement.src
 // Argument:      assignedValue
 // Browser:       All
 // Example:       script.src = usercontrolledVal
-/*
+// Identifier:    {type: 'VariableDeclarator', id.name: 'scriptDOMElement'}
 scriptDOMElement.src = userControlledValue;
-*/
 
 // Function Name: ScriptElement.text
 // Argument:      assignedValue

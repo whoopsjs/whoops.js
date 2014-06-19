@@ -75,7 +75,7 @@ crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlled
 // Argument:      assignedValue
 // Browser:       All
 // Example:       script.src = usercontrolledVal
-// Identifier:    {type: 'VariableDeclarator', id.name: 'scriptDOMElement'}
+// Identifier:    {type: 'VariableDeclarator', id.name: 'scriptDOMElement', property.name: 'src'}
 scriptDOMElement.src = userControlledValue;
 
 // Function Name: ScriptElement.text

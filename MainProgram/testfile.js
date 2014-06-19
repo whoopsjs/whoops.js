@@ -107,6 +107,9 @@ scriptDOMElement.innerText = "console.log(\"" + userControlledValue + "\");";
 // Note:          List compiled from
 //                 https://developer.mozilla.org/en-US/docs/Web/Reference/Events
 //                 using using only non-deprecated standard events
+
+
+//Identifier:     {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'aDOMElement', left.property.name: 'on*'}
 /*
 aDOMElement.onabort = "console.log(\"" + userControlledValue + "\");";
 aDOMElement.onafterprint = "console.log(\"" + userControlledValue + "\");";

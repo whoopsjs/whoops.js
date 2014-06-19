@@ -44,6 +44,18 @@ module.exports = function (tree) {
           }
         });
       }
+      } else if (node.callee.name === 'execScript') {
+        // TODO seconds argument === 'JScript'
+        tree.data.problems.push({
+          "type": "risk",
+          "message": "using execScript() is not safe",
+          "weight": 1,
+          "position": {
+            "start": node.start,
+            "end": node.end
+          }
+        });
+      }
     }
   });
 };

@@ -5,6 +5,50 @@ module.exports = function (tree) {
     CallExpression: function (node, state, c) {
       if(node.callee.type === 'MemberExpression'
         && node.callee.name === 'document'){
+        if(node.callee.property.name === 'adoptNode'){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'Output',
+            'weight': 5,
+            'position': {
+              'start': node.start,
+              'end': node.end
+            }
+          });
+        }
+        if(node.callee.property.name === 'anchors'){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'Output',
+            'weight': 5,
+            'position': {
+              'start': node.start,
+              'end': node.end
+            }
+          });
+        }
+        if(node.callee.property.name === 'applets'){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'Output',
+            'weight': 5,
+            'position': {
+              'start': node.start,
+              'end': node.end
+            }
+          });
+        }
+        if(node.callee.property.name === 'adoptNode'){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'Output',
+            'weight': 5,
+            'position': {
+              'start': node.start,
+              'end': node.end
+            }
+          });
+        }
         if(node.callee.property.name === 'getElementById'){
           tree.data.problems.push({
             'type': 'warning',

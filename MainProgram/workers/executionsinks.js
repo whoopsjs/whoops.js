@@ -70,17 +70,33 @@ module.exports = function (tree) {
     },
     AssignmentExpression: function (node, state, c) {
       if (node.left.type === 'MemberExpression'
-          && isScriptDOMElement(node.left.object)
-          && node.left.property.name === 'src') {
-        tree.data.problems.push({
-          "type": "risk",
-          "message": "assigning a user controlled value to ScriptElement.src is not safe",
-          "weight": 1,
-          "position": {
-            "start": node.start,
-            "end": node.end
-          }
-        });
+          && isUserControlledValue(node.right.object)) {
+        if (isScriptDOMElement(node.left.object)
+            && (node.left.property.name === 'src'
+                || node.left.property.name === 'text'
+                || node.left.property.name === 'textContent'
+                || node.left.property.name === 'innerText')) {
+          tree.data.problems.push({
+            'type': 'risk',
+            'message': 'assigning a user controlled value to ScriptElement.' + node.left.property.name + ' is not safe',
+            'weight': 1,
+            'position': {
+              'start': node.start,
+              'end': node.end
+            }
+          });
+        } else if (isAnyDOMElement(node.left.object)
+            && (node.left.property.name === 'on*')) { // TODO replace * with regex or substring
+          tree.data.problems.push({
+            'type': 'risk',
+            'message': 'assigning a user controlled value to DOMNode.' + node.left.property.name + ' is not safe',
+            'weight': 1,
+            'position': {
+              'start': node.start,
+              'end': node.end
+            }
+          });
+        }
       }
     }
   });

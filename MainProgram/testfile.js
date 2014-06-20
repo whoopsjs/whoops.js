@@ -61,7 +61,7 @@ setImmediate("console.log(\"" + userControlledValue + "\");");
 // Argument:      CallExpression.arguments[0]
 // Browser:       IE 6+
 // Example:       execScript("jsCode"+usercontrolledVal ,"JScript")
-// Identifier:    {type: 'CallExpression', callee.name: 'execScript'}
+// Identifier:    {type: 'CallExpression', callee.name: 'execScript', arguments[1]: 'JScript'}
 execScript("console.log(\"" + userControlledValue + "\");", "JScript");
 
 // Function Name: crypto.generateCRMFRequest

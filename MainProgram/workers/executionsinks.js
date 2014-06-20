@@ -86,7 +86,7 @@ module.exports = function (tree) {
             }
           });
         } else if (isAnyDOMElement(node.left.object)
-            && (node.left.property.name === 'on*')) { // TODO replace * with regex or substring
+                   && (node.left.property.name.substring(0, 2) === 'on')) {
           tree.data.problems.push({
             'type': 'risk',
             'message': 'assigning a user controlled value to DOMNode.' + node.left.property.name + ' is not safe',

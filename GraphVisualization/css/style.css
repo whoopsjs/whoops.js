@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+circle.node {
+  cursor: pointer;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+circle.node.directory {
+  stroke: #9ecae1;
+  stroke-width: 1px;
+}
+
+circle.node.collapsed {
+  stroke: #555;
+}
+
+.nodetext {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  fill: #252929;
+  font-weight: 300;
+  text-shadow: 0 0 0.3em white;
+}
+
+line.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}

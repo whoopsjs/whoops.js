@@ -8,8 +8,8 @@
   },
   "build_systems": [
     {
-      "cmd": ["nodejs", ".", "testfile.js"],
-      "name": "nodejs . testfile.js",
+      "cmd": ["node", ".", "testfile.js"],
+      "name": "node . testfile.js",
       "selector": "source.js",
       "working_dir": "${project_path:${folder}}/MainProgram"
     }
@@ -45,6 +45,9 @@
       [
         "node_modules"
       ]
+    },
+    {
+      "path": "GraphVisualization"
     }
   ]
 }

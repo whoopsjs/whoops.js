@@ -67,14 +67,15 @@ CodeFlower.prototype.update = function(json) {
 
   // Restart the force layout
   this.force
-    .gravity(Math.atan(total / 50) / Math.PI * 0.4)
+    // .gravity(Math.atan(total / 50) / Math.PI * 0.4)
+    .gravity(0)
     .nodes(nodes)
     .links(links)
     .start();
 
   // Update the links
   this.link = this.svg.selectAll("line.link")
-    .data(links, function(d) { return d.target.name; });
+    .data(links, function(d) { return d.target.message; });
 
   // Enter any new links
   this.link.enter().insert("svg:line", ".node")
@@ -89,7 +90,7 @@ CodeFlower.prototype.update = function(json) {
 
   // Update the nodes
   this.node = this.svg.selectAll("circle.node")
-    .data(nodes, function(d) { return d.name; })
+    .data(nodes, function(d) { return d.message; })
     .classed("collapsed", function(d) { return d._children ? 1 : 0; });
 
   this.node.transition()
@@ -99,12 +100,12 @@ CodeFlower.prototype.update = function(json) {
   this.node.enter().append('svg:circle')
     .attr("class", "node")
     .classed('directory', function(d) {
-      d.size = d.risk * 100;
+      d.size = d.problemWeight * 100;
       return (d._children || d.children) ? 1 : 0; }
     )
     .attr("r", function(d) { return d.children ? 3.5 : Math.pow(d.size, 2/5) || 1; })
     .style("fill", function color(d) {
-      var color = getColor(d.risk);
+      var color = getColor(d.problemWeight);
       return "rgb("+color.r+","+color.g+","+color.b+")";
       // return "hsl(" + parseInt(360 / total * d.id, 10) + ",90%,70%)";
     })
@@ -157,8 +158,8 @@ CodeFlower.prototype.click = function(d) {
 
 CodeFlower.prototype.mouseover = function(d) {
   this.text.attr('transform', 'translate(' + d.x + ',' + (d.y - 5 - (d.children ? 3.5 : Math.sqrt(d.size) / 2)) + ')')
-    .text(d.name + " - risk: " + d.risk)
-    .style('display', null);
+    .text(d.message + " - weight: " + d.problemWeight)
+    .style('display', 'block');
 };
 
 CodeFlower.prototype.mouseout = function(d) {

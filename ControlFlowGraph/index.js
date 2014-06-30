@@ -84,6 +84,32 @@ function fillNode(node, state) {
 
 function expressionHandler(expression) {
   switch (expression.type) {
+    case 'ArrayExpression':
+      for (var i = 0; i < expression.elements.length; i++) {
+        if (expression.elements[i] !== null) {
+          expressionHandler(expression.elements[i]);
+        }
+      };
+      expression.evaluate = function() {
+        var a = [];
+        for (var i = 0; i < expression.elements.length; i++) {
+          if (expression.elements[i] !== null) {
+            a.push(expression.elements[i].evaluate());
+          } else {
+            a.push(expression.elements[i]);
+          }
+        }
+        return a;
+      };
+      expression.isUserControlled = function() {
+        for (var i = expression.elements.length - 1; i >= 0; i--) {
+          if(expression.elements[i] !== null && expression.elements[i].isUserControlled()) {
+            return true;
+          }
+        }
+        return false;
+      };
+      break;
     default:
       expression.evaluate = function() {
         return undefined;

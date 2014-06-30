@@ -140,6 +140,14 @@ function expressionHandler(expression) {
         return true; // TODO implement
       };
       break;
+    case 'Identifier':
+      expression.evaluate = function() {
+        return expression.name; // TODO something like return context[expression.name]
+      };
+      expression.isUserControlled = function() {
+        return false;
+      };
+      break;
     default:
       expression.evaluate = function() {
         return undefined;

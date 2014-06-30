@@ -129,6 +129,17 @@ function expressionHandler(expression) {
         return left.isUserControlled() || right.isUserControlled();
       };
       break;
+    case 'CallExpression':
+      for (var i = 0; i < expression.arguments.length; i++) {
+        expressionHandler(expression.arguments[i]);
+      };
+      expression.evaluate = function() {
+        return undefined; // TODO implement
+      };
+      expression.isUserControlled = function() {
+        return true; // TODO implement
+      };
+      break;
     default:
       expression.evaluate = function() {
         return undefined;

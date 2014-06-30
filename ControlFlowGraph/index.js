@@ -148,6 +148,14 @@ function expressionHandler(expression) {
         return false;
       };
       break;
+    case 'Literal':
+      expression.evaluate = function() {
+        return expression.value;
+      };
+      expression.isUserControlled = function() {
+        return false;
+      };
+      break;
     default:
       expression.evaluate = function() {
         return undefined;

@@ -49,6 +49,7 @@ module.exports = function (filename, cb) {
 
       ExpressionStatement: function (node, state, c) {
         fillNode(node, state);
+        expressionHandler(node.expression);
       },
 
       VariableDeclaration: function (node, state, c) {
@@ -79,4 +80,18 @@ function fillNode(node, state) {
     }
   });
 
+}
+
+function expressionHandler(expression) {
+  switch (expression.type) {
+    default:
+      expression.evaluate = function() {
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // we don't know, so to be sure we say yes
+        return true;
+      };
+      break;
+  }
 }

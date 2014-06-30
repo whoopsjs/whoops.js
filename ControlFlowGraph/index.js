@@ -110,6 +110,25 @@ function expressionHandler(expression) {
         return false;
       };
       break;
+    case 'BinaryExpression':
+      expressionHandler(expression.right);
+      expressionHandler(expression.left);
+      expression.evaluate = function() {
+        var left = expression.left.evaluate();
+        var right = expression.right.evaluate();
+        if (typeof left === 'string') {
+          left = '\'' + left + '\'';
+        }
+        if (typeof right === 'string') {
+          right = '\'' + right + '\'';
+        }
+        var result = eval(left + ' ' + expression.operator + ' ' + right);
+        return result;
+      };
+      expression.isUserControlled = function() {
+        return left.isUserControlled() || right.isUserControlled();
+      };
+      break;
     default:
       expression.evaluate = function() {
         return undefined;

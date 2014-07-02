@@ -31,7 +31,7 @@ module.exports = function (tree) {
     CallExpression: function (node, state, c) {
       //We look into the LOWEST CallExpression here for now.
       var callNode = node;
-      if(node.arguments[0].type === 'CallExpression'){
+      while(node.arguments[0].type === 'CallExpression'){
         callNode = node.arguments[0];
       }
       if(callNode.callee.type === 'MemberExpression'

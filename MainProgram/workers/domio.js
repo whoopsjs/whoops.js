@@ -47,6 +47,7 @@ module.exports = function (tree) {
               'end': callNode.end
             }
           });
+        }
         if(callNode.callee.property.name === 'createAttribute'
           &&  contains(inputs,callNode.arguments[0].name)){
           tree.data.problems.push({
@@ -58,6 +59,7 @@ module.exports = function (tree) {
               'end': callNode.end
             }
           });
+        }
         if(callNode.callee.property.name === 'createComment'
           &&  contains(inputs,callNode.arguments[0].name)){
           tree.data.problems.push({
@@ -69,6 +71,7 @@ module.exports = function (tree) {
               'end': callNode.end
             }
           });
+        }
         if(callNode.callee.property.name === 'createElementS'
           &&  contains(inputs,callNode.arguments[0].name)){
           tree.data.problems.push({

@@ -1,5 +1,5 @@
 var walk = require('acorn/util/walk');
-//still not working, but puts all input values into an array
+//working in testing.js
 //inefficient, but will do for now.
 function contains(a, obj) {
   for (var i = 0; i < a.length; i++) {

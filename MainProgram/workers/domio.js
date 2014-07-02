@@ -12,7 +12,6 @@ function contains(a, obj) {
 
 module.exports = function (tree) {
   var inputs = new Array(); //saving all the names of our inputs
-  inputs.push('input1');
   walk.recursive(tree.data.cfg, {}, {  
     //We will have to go to the VariableDeclarators over the VariableDeclarations for some reason.
     VariableDeclaration: function (node, state, c) {
@@ -27,20 +26,25 @@ module.exports = function (tree) {
     }
   });
   
+  //Works more or less
   walk.recursive(tree.data.cfg, {}, {
     CallExpression: function (node, state, c) {
-      if(node.callee.type === 'MemberExpression'
-        && node.callee.object.name === 'document'){
-        console.log(node.arguments[0]);
-        if(node.callee.property.name === 'createTextNode'
-          &&  contains(inputs,node.arguments[0].name)){
+      //We look into the LOWEST CallExpression here for now.
+      var callNode = node;
+      if(node.arguments[0].type === 'CallExpression'){
+        callNode = node.arguments[0];
+      }
+      if(callNode.callee.type === 'MemberExpression'
+        && callNode.callee.object.name === 'document'){
+        if(callNode.callee.property.name === 'createTextNode'
+          &&  contains(inputs,callNode.arguments[0].name)){
           tree.data.problems.push({
             'type': 'warning',
             'message': 'To put a user defined variable into the DOM tree is a risk',
             'weight': 5,
             'position': {
-              'start': node.start,
-              'end': node.end
+              'start': callNode.start,
+              'end': callNode.end
             }
           });
         }

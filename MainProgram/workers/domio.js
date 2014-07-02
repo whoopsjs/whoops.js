@@ -12,7 +12,7 @@ function contains(a, obj) {
 
 module.exports = function (tree) {
   var inputs = new Array(); //saving all the names of our inputs
-  walk.recursive(tree.data.cfg, {}, {  
+  walk.recursive(tree.data.cfg, {}, {
     //We will have to go to the VariableDeclarators over the VariableDeclarations for some reason.
     VariableDeclaration: function (node, state, c) {
       var declarator = node.declarations;
@@ -25,7 +25,7 @@ module.exports = function (tree) {
       }
     }
   });
-  
+
   //Works more or less
   walk.recursive(tree.data.cfg, {}, {
     CallExpression: function (node, state, c) {
@@ -48,7 +48,43 @@ module.exports = function (tree) {
             }
           });
         }
-      }      
-    } 
+        if(callNode.callee.property.name === 'createAttribute'
+          &&  contains(inputs,callNode.arguments[0].name)){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'To put a user defined variable into the DOM tree is a risk',
+            'weight': 5,
+            'position': {
+              'start': callNode.start,
+              'end': callNode.end
+            }
+          });
+        }
+        if(callNode.callee.property.name === 'createComment'
+          &&  contains(inputs,callNode.arguments[0].name)){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'To put a user defined variable into the DOM tree is a risk',
+            'weight': 5,
+            'position': {
+              'start': callNode.start,
+              'end': callNode.end
+            }
+          });
+        }
+        if(callNode.callee.property.name === 'createElementS'
+          &&  contains(inputs,callNode.arguments[0].name)){
+          tree.data.problems.push({
+            'type': 'warning',
+            'message': 'To put a user defined variable into the DOM tree is a risk',
+            'weight': 5,
+            'position': {
+              'start': callNode.start,
+              'end': callNode.end
+            }
+          });
+        }
+      }
+    }
   });    //graph.domio = 'success';
 };

@@ -9,6 +9,7 @@
   "author": "",
   "dependencies": {
     "async": "^0.9.0",
-    "commander": "^2.2.0"
+    "commander": "^2.2.0",
+    "open": "^0.0.5"
   }
 }

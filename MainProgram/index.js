@@ -3,6 +3,7 @@ var cfg = require('../ControlFlowGraph');
 var fs = require('fs');
 var async = require('async');
 var util = require('util');
+var open = require("open");
 
 var workers = [];
 
@@ -13,7 +14,8 @@ if (fs.existsSync('./workers')) {
 }
 
 program
-  .option('-g, --show-graph', 'Print the full control flow graph');
+  .option('-g, --show-graph', 'Print the full control flow graph')
+  .option('-v, --visualize', 'Visualize the results');
 
 program
   .command('*')
@@ -43,6 +45,16 @@ program
         if (program.showGraph) {
           console.log("Graph:")
           console.log(util.inspect(tree.data.cfg, {showHidden: false, depth: null}));
+        };
+        if (program.visualize) {
+          console.log("Opening Visualization...");
+          fs.writeFile(__dirname.replace('MainProgram', 'GraphVisualization/problems.js'), JSON.stringify(tree.data.problems), function(err) {
+            if(err) {
+                console.log(err);
+            }
+          });
+          // open browser window with visualization
+          open(__dirname.replace('MainProgram', 'GraphVisualization/index.html'));
         };
       }
     });

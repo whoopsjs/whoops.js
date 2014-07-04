@@ -1,5 +1,5 @@
 function getColor(risk) {
-    // Bestimmung der Maximal Farben
+    // set colors
     var colorBad = {
         r: 255,
         g: 2,
@@ -15,15 +15,13 @@ function getColor(risk) {
       return colorGood;
     }
 
-    // Bestimmun der Gewichtung
+    // calculate color of node
     var weight = risk / 10;
     var colorResult = {
         r: Math.round((1-weight) * colorGood.r + weight * colorBad.r),
         g: Math.round((1-weight) * colorGood.g + weight * colorBad.g),
         b: Math.round((1-weight) * colorGood.b + weight * colorBad.b)
     };
-
-    console.log(colorResult);
 
     return colorResult;
 }

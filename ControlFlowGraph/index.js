@@ -53,6 +53,14 @@ module.exports = function (filename, cb) {
 
       VariableDeclaration: function (node, state, c) {
         fillNode(node, state);
+      },
+
+      FunctionDeclaration: function(node, state, c) {
+        var previous = state.previous;
+        state.previous = [];
+        c(node.body, state);
+        state.previous = previous;
+        fillNode(node, state);
       }
     };
     walk.recursive(ast, {}, functions);

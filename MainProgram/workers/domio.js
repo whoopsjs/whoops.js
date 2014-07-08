@@ -25,7 +25,7 @@ module.exports = function (tree) {
           (subnode.callee.property.name === 'createElement' 
           && contains(monitoredTags,subnode.arguments[0].value)))){
             //Push element into List if not already existant.
-            if(contains(inputs, declarator[i].id.name)){
+            if(!contains(inputs, declarator[i].id.name)){
               inputs.push(declarator[i].id.name);
             }
         }
@@ -43,48 +43,14 @@ module.exports = function (tree) {
       }
       var memberNode;
       if(callNode.callee.type === 'MemberExpression'){
-        memberNode = callNode.callee.object
+        memberNode = callNode.callee
         while(memberNode.object != undefined && memberNode.object.type === 'MemberExpression'){
           memberNode =  memberNode.object
         }
-        if(memberNode.name === 'document'){
-          if(callNode.callee.property.name === 'createTextNode'
+        //Body always comes in combination with 'appendChild', as it can't read 'object' where 'appendChild' sits.
+        if(memberNode.name === 'document' || memberNode.property.name === 'body'){
+          if(callNode.callee.property.name === 'appendChild'
             &&  contains(inputs,callNode.arguments[0].name)){
-            tree.data.problems.push({
-              'type': 'warning',
-              'message': 'To put a user defined variable into the TextNode tree is a risk',
-              'weight': 5,
-              'position': {
-                'start': callNode.start,
-                'end': callNode.end
-              }
-            });
-          }
-          if(callNode.callee.property.name === 'createAttribute'
-            &&  contains(inputs,callNode.arguments[0].name)){
-            tree.data.problems.push({
-              'type': 'warning',
-              'message': 'To put a user defined variable into the Attribute tree is a risk',
-              'weight': 5,
-              'position': {
-                'start': callNode.start,
-                'end': callNode.end
-              }
-            });
-          }
-          if(callNode.callee.property.name === 'createComment'
-            &&  contains(inputs,callNode.arguments[0].name)){
-            tree.data.problems.push({
-              'type': 'warning',
-              'message': 'To put a user defined variable into the Comment tree is a risk',
-              'weight': 5,
-              'position': {
-                'start': callNode.start,
-                'end': callNode.end
-              }
-            });
-          }
-          else{
             tree.data.problems.push({
               'type': 'warning',
               'message': 'To put a user defined variable into the DOM tree is a risk',

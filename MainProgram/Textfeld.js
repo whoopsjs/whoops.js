@@ -1,6 +1,6 @@
 document.onreadystatechange = function() {
-	if(document.readyState == "complete") {   
-    var span = document.createElement("span");
+	if(document.readyState == 'complete') {   
+    var span = document.createElement('span');
 		var input1 = document.createElement('input');
 		document.body.appendChild(input1);
 		var button1 = document.createElement('button');

@@ -10,16 +10,17 @@ document.onreadystatechange = function() {
 			var inputs = document.getElementsByTagName('input');
 			for (var i = 0; i < inputs.length; i++)
 			{
-				if(input.value === '')
+				if(inputs[0].value === '')
 				{
-					input.style.borderColor = 'red';
+					inputs[0].style.borderColor = 'red';
 				}
 				else
 				{
-					input.style.borderColor = 'lime';
-          span.appendChild(document.createTextNode(input.value));
+					inputs[0].style.borderColor = 'lime';
+          span.appendChild(document.createTextNode(inputs[0].value));
+          var input2 = prompt('Evil Dom Input!');
+          span.appendChild(document.createTextNode(input2));
 				}
-				console.log(input);
 			}
 		};
 		document.body.appendChild(button1);

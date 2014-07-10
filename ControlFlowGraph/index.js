@@ -115,7 +115,7 @@ function expressionHandler(expression, statement) {
           if (expression.elements[i] !== null) {
             a.push(expression.elements[i].evaluate());
           } else {
-            a.push(expression.elements[i]);
+            a.push(null);
           }
         }
         return a;

@@ -92,7 +92,13 @@ function fillNode(node, state) {
 
 function expressionHandler(expression, statement) {
   switch (expression.type) {
-    case 'ArrowExpression':
+    // explanation for comments after case '...':
+    //  @name: to be done by name
+    //  statement: needs unimplemented functionality from ExpressionStatement (will be done or assigned by @mzimmer)
+    //  alpha: to be done at a later point
+    //  beta: to be done at a much later point
+    //  [nothing at all]: done
+    case 'ArrowExpression': // beta
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -129,7 +135,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'AssignmentExpression':
+    case 'AssignmentExpression': // statement
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -159,7 +165,7 @@ function expressionHandler(expression, statement) {
         return left.isUserControlled() || right.isUserControlled();
       };
       break;
-    case 'CallExpression':
+    case 'CallExpression': // statement
       for (var i = 0; i < expression.arguments.length; i++) {
         expressionHandler(expression.arguments[i], statement);
       };
@@ -170,7 +176,7 @@ function expressionHandler(expression, statement) {
         return true; // TODO implement
       };
       break;
-    case 'ConditionalExpression':
+    case 'ConditionalExpression': // @mspl
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -181,7 +187,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'FunctionExpression':
+    case 'FunctionExpression': // @mzimmer
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -192,7 +198,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'Identifier':
+    case 'Identifier': // statement
       expression.evaluate = function() {
         return expression.name; // TODO something like return context[expression.name]
       };
@@ -208,7 +214,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'LogicalExpression':
+    case 'LogicalExpression': // @mlaudan
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -219,7 +225,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'MemberExpression':
+    case 'MemberExpression': // statement
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -230,7 +236,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'NewExpression':
+    case 'NewExpression': // beta
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -241,7 +247,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'ObjectExpression':
+    case 'ObjectExpression': // statement
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -252,7 +258,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'SequenceExpression':
+    case 'SequenceExpression': // beta
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -263,7 +269,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'ThisExpression':
+    case 'ThisExpression': // alpha
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -274,7 +280,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'UnaryExpression':
+    case 'UnaryExpression': // @mspl
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement
@@ -285,7 +291,7 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'UpdateExpression':
+    case 'UpdateExpression': // alpha
       // TODO expressionHandler(, statement);
       expression.evaluate = function() {
         // TODO implement

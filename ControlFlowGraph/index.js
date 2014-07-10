@@ -92,6 +92,17 @@ function fillNode(node, state) {
 
 function expressionHandler(expression, statement) {
   switch (expression.type) {
+    case 'ArrowExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
     case 'ArrayExpression':
       for (var i = 0; i < expression.elements.length; i++) {
         if (expression.elements[i] !== null) {
@@ -115,6 +126,17 @@ function expressionHandler(expression, statement) {
             return true;
           }
         }
+        return false;
+      };
+      break;
+    case 'AssignmentExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
         return false;
       };
       break;
@@ -148,6 +170,28 @@ function expressionHandler(expression, statement) {
         return true; // TODO implement
       };
       break;
+    case 'ConditionalExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'FunctionExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
     case 'Identifier':
       expression.evaluate = function() {
         return expression.name; // TODO something like return context[expression.name]
@@ -161,6 +205,94 @@ function expressionHandler(expression, statement) {
         return expression.value;
       };
       expression.isUserControlled = function() {
+        return false;
+      };
+      break;
+    case 'LogicalExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'MemberExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'NewExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'ObjectExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'SequenceExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'ThisExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'UnaryExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
+        return false;
+      };
+      break;
+    case 'UpdateExpression':
+      // TODO expressionHandler(, statement);
+      expression.evaluate = function() {
+        // TODO implement
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        // TODO implement
         return false;
       };
       break;

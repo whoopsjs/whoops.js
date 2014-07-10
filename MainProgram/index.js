@@ -48,13 +48,32 @@ program
         };
         if (program.visualize) {
           console.log("Opening Visualization...");
+
+          // Create web server
+          var connect     = require('connect'),
+              serveStatic = require('serve-static');
+
+          // set port number
+          var portNumber = 3000;
+
+          // create server
+          var app = connect();
+
+          // set directory to deliver
+          app.use(serveStatic(__dirname.replace('MainProgram', 'GraphVisualization')));
+
+          // set portnumber to listen to
+          app.listen(portNumber);
+
+          // write problems to file
           fs.writeFile(__dirname.replace('MainProgram', 'GraphVisualization/problems.js'), JSON.stringify(tree.data.problems), function(err) {
             if(err) {
                 console.log(err);
             }
           });
+
           // open browser window with visualization
-          open(__dirname.replace('MainProgram', 'GraphVisualization/index.html'));
+          open('http://localhost:' + portNumber);
         };
       }
     });

@@ -49,7 +49,7 @@ module.exports = function (filename, cb) {
 
       ExpressionStatement: function (node, state, c) {
         fillNode(node, state);
-        expressionHandler(node.expression);
+        expressionHandler(node.expression, node);
       },
 
       VariableDeclaration: function (node, state, c) {
@@ -90,12 +90,12 @@ function fillNode(node, state) {
 
 }
 
-function expressionHandler(expression) {
+function expressionHandler(expression, statement) {
   switch (expression.type) {
     case 'ArrayExpression':
       for (var i = 0; i < expression.elements.length; i++) {
         if (expression.elements[i] !== null) {
-          expressionHandler(expression.elements[i]);
+          expressionHandler(expression.elements[i], statement);
         }
       };
       expression.evaluate = function() {
@@ -119,8 +119,8 @@ function expressionHandler(expression) {
       };
       break;
     case 'BinaryExpression':
-      expressionHandler(expression.right);
-      expressionHandler(expression.left);
+      expressionHandler(expression.right, statement);
+      expressionHandler(expression.left, statement);
       expression.evaluate = function() {
         var left = expression.left.evaluate();
         var right = expression.right.evaluate();
@@ -139,7 +139,7 @@ function expressionHandler(expression) {
       break;
     case 'CallExpression':
       for (var i = 0; i < expression.arguments.length; i++) {
-        expressionHandler(expression.arguments[i]);
+        expressionHandler(expression.arguments[i], statement);
       };
       expression.evaluate = function() {
         return undefined; // TODO implement

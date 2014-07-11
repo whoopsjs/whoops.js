@@ -49,7 +49,7 @@ module.exports = function (filename, cb) {
 
       ExpressionStatement: function (node, state, c) {
         fillNode(node, state);
-        expressionHandler(node.expression, node);
+        expressionHandler(node.expression);
       },
 
       VariableDeclaration: function (node, state, c) {
@@ -90,120 +90,27 @@ function fillNode(node, state) {
 
 }
 
-function expressionHandler(expression, statement) {
+function expressionHandler(expression) {
   switch (expression.type) {
-    // explanation for comments after case '...':
-    //  @name: to be done by name
-    //  statement: needs unimplemented functionality from ExpressionStatement (will be done or assigned by @mzimmer)
-    //  alpha: to be done at a later point
-    //  beta: to be done at a much later point
-    //  [nothing at all]: done
-    case 'ArrowExpression': // beta
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'ArrayExpression':
-      for (var i = 0; i < expression.elements.length; i++) {
-        if (expression.elements[i] !== null) {
-          expressionHandler(expression.elements[i], statement);
-        }
-      };
-      expression.evaluate = function() {
-        var a = [];
-        for (var i = 0; i < expression.elements.length; i++) {
-          if (expression.elements[i] !== null) {
-            a.push(expression.elements[i].evaluate());
-          } else {
-            a.push(null);
-          }
-        }
-        return a;
-      };
-      expression.isUserControlled = function() {
-        for (var i = expression.elements.length - 1; i >= 0; i--) {
-          if(expression.elements[i] !== null && expression.elements[i].isUserControlled()) {
-            return true;
-          }
-        }
-        return false;
-      };
-      break;
-    case 'AssignmentExpression': // statement
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
     case 'BinaryExpression':
-      expressionHandler(expression.right, statement);
-      expressionHandler(expression.left, statement);
+      expressionHandler(expression.right);
+      expressionHandler(expression.left);
       expression.evaluate = function() {
         var left = expression.left.evaluate();
         var right = expression.right.evaluate();
+        if (left === undefined || right === undefined) {
+          return undefined;
+        }
         if (typeof left === 'string') {
           left = '\'' + left + '\'';
         }
         if (typeof right === 'string') {
           right = '\'' + right + '\'';
         }
-        var result = eval(left + ' ' + expression.operator + ' ' + right);
-        return result;
+        return eval(left + ' ' + expression.operator + ' ' + right);
       };
       expression.isUserControlled = function() {
         return left.isUserControlled() || right.isUserControlled();
-      };
-      break;
-    case 'CallExpression': // statement
-      for (var i = 0; i < expression.arguments.length; i++) {
-        expressionHandler(expression.arguments[i], statement);
-      };
-      expression.evaluate = function() {
-        return undefined; // TODO implement
-      };
-      expression.isUserControlled = function() {
-        return true; // TODO implement
-      };
-      break;
-    case 'ConditionalExpression': // @mspl
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'FunctionExpression': // @mzimmer
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'Identifier': // statement
-      expression.evaluate = function() {
-        return expression.name; // TODO something like return context[expression.name]
-      };
-      expression.isUserControlled = function() {
-        return false;
       };
       break;
     case 'Literal':
@@ -214,92 +121,25 @@ function expressionHandler(expression, statement) {
         return false;
       };
       break;
-    case 'LogicalExpression': // @mlaudan
-      // TODO expressionHandler(, statement);
+    case 'UnaryExpression':
+      expressionHandler(expression.argument);
       expression.evaluate = function() {
-        // TODO implement
-        return undefined;
+        var result = expression.argument.evaluate();
+        if (result === undefined) {
+          return undefined;
+        }
+        if (typeof result === 'string') {
+          result = '\'' + result + '\'';
+        }
+        if (expression.prefix) {
+          result = expression.operator + ' ' + result;
+        } else {
+          result += ' ' + expression.operator;
+        }
+        return eval(result);
       };
       expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'MemberExpression': // statement
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'NewExpression': // beta
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'ObjectExpression': // statement
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'SequenceExpression': // beta
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'ThisExpression': // alpha
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'UnaryExpression': // @mspl
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
-      };
-      break;
-    case 'UpdateExpression': // alpha
-      // TODO expressionHandler(, statement);
-      expression.evaluate = function() {
-        // TODO implement
-        return undefined;
-      };
-      expression.isUserControlled = function() {
-        // TODO implement
-        return false;
+        return expression.argument.isUserControlled();
       };
       break;
     default:
@@ -307,8 +147,7 @@ function expressionHandler(expression, statement) {
         return undefined;
       };
       expression.isUserControlled = function() {
-        // we don't know, so to be sure we say yes
-        return true;
+        return true; // we don't know, so to be sure we say yes
       };
       break;
   }

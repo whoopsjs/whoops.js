@@ -1,20 +1,23 @@
 var walk = require('acorn/util/walk');
 
 module.exports = function (tree) {
+  function p(node, message) {
+    tree.data.problems.push({
+      'type': 'risk',
+      'message': message,
+      'weight': 1,
+      'position': {
+        'start': node.start,
+        'end': node.end
+      }
+    });
+  }
   walk.recursive(tree.data.cfg, {}, {
     CallExpression: function (node, state, c) {
       // {type: 'CallExpression', callee.name: 'eval', arguments[0]: isUserControlledValue}
       if (node.callee.name === 'eval'
           && isUserControlledValue(node.arguments[0])) {
-        tree.data.problems.push({
-          'type': 'risk',
-          'message': 'Using a user controlled value as first argument for eval() is not safe.',
-          'weight': 1,
-          'position': {
-            'start': node.start,
-            'end': node.end
-          }
-        });
+        p(node, 'Using a user controlled value as first argument for eval() is not safe.');
       // {type: 'CallExpression', callee.name: 'setTimeout', arguments[0]: isUserControlledValue}
       // {type: 'CallExpression', callee.name: 'setInterval', arguments[0]: isUserControlledValue}
       // {type: 'CallExpression', callee.name: 'setImmediate', arguments[0]: isUserControlledValue}
@@ -23,40 +26,16 @@ module.exports = function (tree) {
                   || node.callee.name === 'setImmediate')
                  && evaluatedToType(node.arguments[0], 'string')
                  && isUserControlledValue(node.arguments[0])) {
-        tree.data.problems.push({
-          'type': 'risk',
-          'message': 'Using a user controlled string as first argument for ' + node.callee.name + '() is not safe.',
-          'weight': 1,
-          'position': {
-            'start': node.start,
-            'end': node.end
-          }
-        });
+        p(node, 'Using a user controlled string as first argument for ' + node.callee.name + '() is not safe.');
       // Identifier: {type: 'CallExpression', callee.name: 'Function', arguments[arguments.length - 1]: isUserControlledValue}
       } else if (node.callee.name === 'Function'
                  && isUserControlledValue(node.arguments[node.arguments.length - 1])) {
-        tree.data.problems.push({
-          'type': 'risk',
-          'message': 'Using a user controlled value as last argument for Function() is not safe.',
-          'weight': 1,
-          'position': {
-            'start': node.start,
-            'end': node.end
-          }
-        });
+        p(node, 'Using a user controlled value as last argument for Function() is not safe.');
       // Identifier: {type: 'CallExpression', callee.name: 'execScript', arguments[0]: isUserControlledValue, arguments[1]: 'JScript'}
       } else if (node.callee.name === 'execScript'
                  && evaluatesTo(node.arguments[1], 'JScript')
                  && isUserControlledValue(node.arguments[0])) {
-        tree.data.problems.push({
-          'type': 'risk',
-          'message': 'Using a user controlled value as first argument for execScript() with \'JScript\' as second argument is not safe.',
-          'weight': 1,
-          'position': {
-            'start': node.start,
-            'end': node.end
-          }
-        });
+        p(node, 'Using a user controlled value as first argument for execScript() with \'JScript\' as second argument is not safe.');
       // Identifier: {type: 'CallExpression', callee.type: 'MemberExpression', callee.object.name: 'crypto', callee.property.name: 'generateCRMFRequest', arguments[0]: 'CN=0', arguments[1]: 0, arguments[2]: 0, arguments[3]: null, arguments[4]: isUserControlledValue, arguments[5]: 384, arguments[6]: null, arguments[7]: 'rsa-dual-use'}
       } else if (node.callee.type === 'MemberExpression'
                  && node.callee.object.name === 'crypto'
@@ -69,15 +48,7 @@ module.exports = function (tree) {
                  && evaluatesTo(node.arguments[6], null)
                  && evaluatesTo(node.arguments[7], 'rsa-dual-use')
                  && isUserControlledValue(node.arguments[4])) {
-        tree.data.problems.push({
-          'type': 'risk',
-          'message': 'Using a user controlled value as fifth argument for crypto.generateCRMFRequest() with \'CN=0\' as first, 0 as second and third, null as fourth and seventh, 384 as sixth and \'rsa-dual-use\' as eighth argument is not safe.',
-          'weight': 1,
-          'position': {
-            'start': node.start,
-            'end': node.end
-          }
-        });
+        p(node, 'Using a user controlled value as fifth argument for crypto.generateCRMFRequest() with \'CN=0\' as first, 0 as second and third, null as fourth and seventh, 384 as sixth and \'rsa-dual-use\' as eighth argument is not safe.');
       }
     },
     AssignmentExpression: function (node, state, c) {
@@ -92,28 +63,12 @@ module.exports = function (tree) {
              || node.left.property.name === 'innerText')
             && isHTMLScriptElement(node.left)
             && isUserControlledValue(node.right)) {
-          tree.data.problems.push({
-            'type': 'risk',
-            'message': 'Assigning a user controlled value to HTMLScriptElement.' + node.left.property.name + ' is not safe.',
-            'weight': 1,
-            'position': {
-              'start': node.start,
-              'end': node.end
-            }
-          });
+          p(node, 'Assigning a user controlled value to HTMLScriptElement.' + node.left.property.name + ' is not safe.');
         // Identifier: {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLElement, left.property.name: 'on*', right: isUserControlledValue}
         } else if (node.left.property.name.substring(0, 2) === 'on'
                    && isHTMLElement(node.left)
                    && isUserControlledValue(node.right)) {
-          tree.data.problems.push({
-            'type': 'risk',
-            'message': 'Assigning a user controlled value to HTMLElement.' + node.left.property.name + ' is not safe.',
-            'weight': 1,
-            'position': {
-              'start': node.start,
-              'end': node.end
-            }
-          });
+          p(node, 'Assigning a user controlled value to HTMLElement.' + node.left.property.name + ' is not safe.');
         }
       }
     }

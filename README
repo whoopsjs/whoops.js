@@ -1,0 +1,11 @@
+Usage: index [options] [command]
+
+  Commands:
+
+    *                      inspect the input file
+
+  Options:
+
+    -h, --help        output usage information
+    -g, --show-graph  Print the full control flow graph
+    -v, --visualize   Visualize the results

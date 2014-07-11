@@ -65,8 +65,14 @@ program
           // set portnumber to listen to
           app.listen(portNumber);
 
+          // set ControlFlowGraph to null to prevent errors
+          tree.data.cfg = null;
+
+          // move file of input to show it later
+          fs.createReadStream(input).pipe(fs.createWriteStream(__dirname.replace('MainProgram', 'GraphVisualization/code.txt')));
+
           // write problems to file
-          fs.writeFile(__dirname.replace('MainProgram', 'GraphVisualization/problems.js'), JSON.stringify(tree.data.problems), function(err) {
+          fs.writeFile(__dirname.replace('MainProgram', 'GraphVisualization/problems.js'), JSON.stringify(tree), function(err) {
             if(err) {
                 console.log(err);
             }

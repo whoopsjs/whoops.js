@@ -147,9 +147,19 @@ CodeFlower.prototype.click = function(d) {
   if (d.children) {
     d._children = d.children;
     d.children = null;
+
+    // remove all previous line highlight
+    $('.line.highlighted').removeClass('highlighted');
   } else {
     d.children = d._children;
     d._children = null;
+
+    // remove all previous line highlight
+    $('.line.highlighted').removeClass('highlighted');
+
+    // add line highlight
+    $('.line.number' + d.lineNumber).addClass('highlighted');
+
   }
   this.update();
 };

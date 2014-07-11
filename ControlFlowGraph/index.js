@@ -49,9 +49,18 @@ module.exports = function (filename, cb) {
 
       ExpressionStatement: function (node, state, c) {
         fillNode(node, state);
+        expressionHandler(node.expression);
       },
 
       VariableDeclaration: function (node, state, c) {
+        fillNode(node, state);
+      },
+
+      FunctionDeclaration: function(node, state, c) {
+        var previous = state.previous;
+        state.previous = [];
+        c(node.body, state);
+        state.previous = previous;
         fillNode(node, state);
       }
     };
@@ -79,4 +88,67 @@ function fillNode(node, state) {
     }
   });
 
+}
+
+function expressionHandler(expression) {
+  switch (expression.type) {
+    case 'BinaryExpression':
+      expressionHandler(expression.right);
+      expressionHandler(expression.left);
+      expression.evaluate = function() {
+        var left = expression.left.evaluate();
+        var right = expression.right.evaluate();
+        if (left === undefined || right === undefined) {
+          return undefined;
+        }
+        if (typeof left === 'string') {
+          left = '\'' + left + '\'';
+        }
+        if (typeof right === 'string') {
+          right = '\'' + right + '\'';
+        }
+        return eval(left + ' ' + expression.operator + ' ' + right);
+      };
+      expression.isUserControlled = function() {
+        return left.isUserControlled() || right.isUserControlled();
+      };
+      break;
+    case 'Literal':
+      expression.evaluate = function() {
+        return expression.value;
+      };
+      expression.isUserControlled = function() {
+        return false;
+      };
+      break;
+    case 'UnaryExpression':
+      expressionHandler(expression.argument);
+      expression.evaluate = function() {
+        var result = expression.argument.evaluate();
+        if (result === undefined) {
+          return undefined;
+        }
+        if (typeof result === 'string') {
+          result = '\'' + result + '\'';
+        }
+        if (expression.prefix) {
+          result = expression.operator + ' ' + result;
+        } else {
+          result += ' ' + expression.operator;
+        }
+        return eval(result);
+      };
+      expression.isUserControlled = function() {
+        return expression.argument.isUserControlled();
+      };
+      break;
+    default:
+      expression.evaluate = function() {
+        return undefined;
+      };
+      expression.isUserControlled = function() {
+        return true; // we don't know, so to be sure we say yes
+      };
+      break;
+  }
 }

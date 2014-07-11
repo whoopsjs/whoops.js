@@ -21,7 +21,7 @@ module.exports = function (tree) {
       } else if ((node.callee.name === 'setTimeout'
                   || node.callee.name === 'setInterval'
                   || node.callee.name === 'setImmediate')
-                 && evaluatedType(node.arguments[0], 'string')
+                 && evaluatedToType(node.arguments[0], 'string')
                  && isUserControlledValue(node.arguments[0])) {
         tree.data.problems.push({
           'type': 'risk',
@@ -90,8 +90,8 @@ module.exports = function (tree) {
              || node.left.property.name === 'text'
              || node.left.property.name === 'textContent'
              || node.left.property.name === 'innerText')
-            && isHTMLScriptElement(node.left.object)
-            && isUserControlledValue(node.right.object)) {
+            && isHTMLScriptElement(node.left)
+            && isUserControlledValue(node.right)) {
           tree.data.problems.push({
             'type': 'risk',
             'message': 'Assigning a user controlled value to HTMLScriptElement.' + node.left.property.name + ' is not safe.',
@@ -103,8 +103,8 @@ module.exports = function (tree) {
           });
         // Identifier: {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLElement, left.property.name: 'on*', right: isUserControlledValue}
         } else if (node.left.property.name.substring(0, 2) === 'on'
-                   && isHTMLElement(node.left.object)
-                   && isUserControlledValue(node.right.object)) {
+                   && isHTMLElement(node.left)
+                   && isUserControlledValue(node.right)) {
           tree.data.problems.push({
             'type': 'risk',
             'message': 'Assigning a user controlled value to HTMLElement.' + node.left.property.name + ' is not safe.',
@@ -121,26 +121,32 @@ module.exports = function (tree) {
 };
 
 function isUserControlledValue(node) {
-  // TODO implement
-  return true;
+  if (node.isUserControlled !== undefined) {
+    return node.isUserControlled();
+  };
+  return true; // we don't know, so to be sure we say yes
 }
 
 function isHTMLScriptElement(node) {
-  // TODO implement
-  return true;
+  return true; // we don't know, so to be sure we say yes
 }
 
 function isHTMLElement(node) {
-  // TODO implement
-  return true;
+  return true; // we don't know, so to be sure we say yes
 }
 
 function evaluatesTo(expression, expected) {
-  // TODO implement (does not work in a lot of situations)
-  return eval(expression.raw) == expected;
+  if (expression.evaluate !== undefined) {
+    var value = expression.evaluate();
+    return value === undefined || value === expected;
+  };
+  return true; // we don't know, so to be sure we say yes
 }
 
-function evaluatedType(expression, type) {
-  // TODO implement
-  return true;
+function evaluatedToType(expression, type) {
+  if (expression.evaluate !== undefined) {
+    var value = expression.evaluate();
+    return value === undefined || typeof value === type;
+  };
+  return true; // we don't know, so to be sure we say yes
 }

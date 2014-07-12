@@ -7,7 +7,7 @@ $(document).ready(function(){
     // var arrayOfLines;
 
     $.ajax({
-        url: "code.txt",
+        url: "code.js",
         type: "GET",
         cache: false,
         async: false,
@@ -27,7 +27,7 @@ $(document).ready(function(){
 
 
     // load file containing the problems and parse it from JSON
-    $.getJSON( "problems.js", function(result) {
+    $.getJSON( "/problems.json", function(result) {
         // go through problems and prepare them
         for (var i = 0; i < result.data.problems.length; ++i) {
             // set the problem-weight propers
@@ -35,7 +35,7 @@ $(document).ready(function(){
 
             // set line number
             // TODO
-            result.data.problems[i].lineNumber = getLineNumberForStartPosition(result.data.problems[i].position.start);
+            // result.data.problems[i].lineNumber = getLineNumberForStartPosition(result.data.problems[i].position.start);
         };
 
         // add the first node

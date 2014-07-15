@@ -2,6 +2,7 @@ document.onreadystatechange = function() {
 	if(document.readyState == 'complete') {   
     var span = document.createElement('span');
 		var input1 = document.createElement('input');
+    var input3 = document.createElement('input');
 		document.body.appendChild(input1);
 		var button1 = document.createElement('button');
 		var button1text = document.createTextNode('push me');
@@ -18,7 +19,8 @@ document.onreadystatechange = function() {
 				{
 					inputs[0].style.borderColor = 'lime';
           span.appendChild(document.createTextNode(inputs[0].value));
-          var input2 = prompt('Evil Dom Input!');
+          var input2 = 'Hello World!';
+          input2 = prompt('Evil Dom Input!');
           span.appendChild(document.createTextNode(input2));
 				}
 			}

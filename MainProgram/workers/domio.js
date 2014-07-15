@@ -58,7 +58,7 @@ module.exports = function (tree) {
             var nameType = new Array(name, type);
             //If we get Elements by Tag Name, then we only need to monitor the value,
             //if it actually returns something.
-            if(subnode.callee.name != 'prompt' 
+            if(subnode.callee.name !== 'prompt' 
               &&subnode.callee.property.name === 'getElementsByTagName' 
               && !contains(inputs, nameType)
               && containsType(inputs,type)){           
@@ -73,12 +73,16 @@ module.exports = function (tree) {
         }
       }
     }
-  });
-  
-  walk.recursive(tree.data.cfg, {}, {
+	});
+	
+	
+	
+	walk.recursive(tree.data.cfg, {}, {
     //We test all assigned values for changes 
     AssignmentExpression: function (node, state, c){
+			//Continue with inner stuff if function is declared;
       if(node.operator === '='){
+				console.log(node);
         //Is new assignment a risk?
         var dangerous;
         //Does Assignment use functions?
@@ -98,9 +102,11 @@ module.exports = function (tree) {
         else if(dangerous){
           inputs.push(new Array(name, node.right.callee.name));
           assignments.push(new Array(name, true, endSign));
-          console.log('derp');
         }
       }
+			if(node.right.type === 'FunctionExpression'){
+				c(node.right.body,state);
+			}
     }
   });
 
@@ -108,7 +114,7 @@ module.exports = function (tree) {
   walk.recursive(tree.data.cfg, {}, {
     CallExpression: function (node, state, c) {
       //Every appended Object will (for now) throw an error, even if the container isn't added to the body.
-      if(node.arguments[0].callee != undefined 
+      if(node.arguments[0].callee !== undefined 
         && node.callee.property.name === 'appendChild'){
         //Go into lowest CallExpression in chain
         var subNode = node;

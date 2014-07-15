@@ -76,9 +76,9 @@ module.exports = function (tree) {
 };
 
 function isUserControlledValue(node) {
-  if (node.isUserControlled !== undefined) {
+  if (typeof node.isUserControlled === 'function') {
     return node.isUserControlled();
-  };
+  }
   return true; // we don't know, so to be sure we say yes
 }
 
@@ -91,17 +91,17 @@ function isHTMLElement(node) {
 }
 
 function evaluatesTo(expression, expected) {
-  if (expression.evaluate !== undefined) {
+  if (typeof expression.evaluate === 'function') {
     var value = expression.evaluate();
     return value === undefined || value === expected;
-  };
+  }
   return true; // we don't know, so to be sure we say yes
 }
 
 function evaluatedToType(expression, type) {
-  if (expression.evaluate !== undefined) {
+  if (typeof expression.evaluate === 'function') {
     var value = expression.evaluate();
     return value === undefined || typeof value === type;
-  };
+  }
   return true; // we don't know, so to be sure we say yes
 }

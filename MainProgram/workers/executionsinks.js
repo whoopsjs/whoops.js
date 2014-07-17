@@ -1,6 +1,6 @@
 var walk = require('acorn/util/walk');
 
-module.exports = function (tree) {
+module.exports = function(tree) {
   function p(node, message) {
     tree.data.problems.push({
       'type': 'risk',
@@ -13,7 +13,7 @@ module.exports = function (tree) {
     });
   }
   walk.recursive(tree.data.cfg, {}, {
-    CallExpression: function (node, state, c) {
+    CallExpression: function(node, state, c) {
       // {type: 'CallExpression', callee.name: 'eval', arguments[0]: isUserControlledValue}
       if (node.callee.name === 'eval'
           && isUserControlledValue(node.arguments[0])) {
@@ -51,7 +51,7 @@ module.exports = function (tree) {
         p(node, 'Using a user controlled value as fifth argument for crypto.generateCRMFRequest() with \'CN=0\' as first, 0 as second and third, null as fourth and seventh, 384 as sixth and \'rsa-dual-use\' as eighth argument is not safe.');
       }
     },
-    AssignmentExpression: function (node, state, c) {
+    AssignmentExpression: function(node, state, c) {
       if (node.left.type === 'MemberExpression') {
         // Identifier: {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLScriptElement, left.property.name: 'src', right: isUserControlledValue}
         // Identifier: {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLScriptElement, left.property.name: 'text', right: isUserControlledValue}

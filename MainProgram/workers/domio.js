@@ -31,6 +31,16 @@ function containsType(a, obj) {
   return false;
 }
 
+//gets the latest object of a List by the Name
+function getLastName(a, obj){
+	for(var i = a.length-1; i >= 0; i--){
+		if (a[i][0] === obj) {
+			return a;
+		}
+	}
+	return [];
+}
+
 //Tests whether or not a node poses a risk
 function dangerousNode(node){
   return node.callee.name === 'prompt' || 
@@ -82,7 +92,6 @@ module.exports = function (tree) {
     AssignmentExpression: function (node, state, c){
 			//Continue with inner stuff if function is declared;
       if(node.operator === '='){
-				console.log(node);
         //Is new assignment a risk?
         var dangerous;
         //Does Assignment use functions?
@@ -98,6 +107,10 @@ module.exports = function (tree) {
         if (containsName(inputs,name)){   
           assignments.push(new Array(name, dangerous, endSign));
         }
+				//Variable takes value of another dangerous one
+				else if(node.right.type == 'Identifier' && containsName(inputs, node.right.name)){
+					assignments.push(new Array(name, getLastName(assignments, node.right.name[1]), endSign));
+				}
         //Defined variable gets dangerous value
         else if(dangerous){
           inputs.push(new Array(name, node.right.callee.name));
@@ -110,7 +123,6 @@ module.exports = function (tree) {
     }
   });
 
-  //Works more or less
   walk.recursive(tree.data.cfg, {}, {
     CallExpression: function (node, state, c) {
       //Every appended Object will (for now) throw an error, even if the container isn't added to the body.

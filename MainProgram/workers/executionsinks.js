@@ -24,7 +24,7 @@ module.exports = function (tree) {
       } else if ((node.callee.name === 'setTimeout'
                   || node.callee.name === 'setInterval'
                   || node.callee.name === 'setImmediate')
-                 && evaluatedToType(node.arguments[0], 'string')
+                 && evaluatesToType(node.arguments[0], 'string')
                  && isUserControlledValue(node.arguments[0])) {
         p(node, 'Using a user controlled string as first argument for ' + node.callee.name + '() is not safe.');
       // Identifier: {type: 'CallExpression', callee.name: 'Function', arguments[arguments.length - 1]: isUserControlledValue}
@@ -98,7 +98,7 @@ function evaluatesTo(expression, expected) {
   return true; // we don't know, so to be sure we say yes
 }
 
-function evaluatedToType(expression, type) {
+function evaluatesToType(expression, type) {
   if (typeof expression.evaluate === 'function') {
     var value = expression.evaluate();
     return value === undefined || typeof value === type;

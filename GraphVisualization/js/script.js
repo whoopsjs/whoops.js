@@ -1,32 +1,83 @@
+var arrayOfLines;
 $(document).ready(function(){
-    var problemsInput;;
+    // variable to save analyzed code
+    var analyzedCode;
 
-    // load file containing the problems and parse it from JSON
+    // variable to keep lines as array
+    // var arrayOfLines;
+
     $.ajax({
-        url:    'problems.js',
-        success: function(result) {
-            // problemsInput = eval(result);
-            problemsInput = $.parseJSON(result);
-        },
-        async:   false
+        url: "code.js",
+        type: "GET",
+        cache: false,
+        async: false,
+        success:function(data) {
+            // Split text to lines
+            arrayOfLines = data.split(/\r?\n/);
+
+            // put data in
+            $('#sourcecode').html('<pre class="brush: js">'+data+'</pre>');
+
+            // start highlighting
+            SyntaxHighlighter.all();
+
+            analyzedCode = data;
+        }
     });
 
-    // go through problems and set the problem-weight propers
-    for (var i = 0; i < problemsInput.length; ++i) {
-        problemsInput[i].problemWeight = problemsInput[i].weight;
-    };
 
-    // add the first node
-    var problemsToAdd = {
-        "message": "root",
-        "problemWeight": 1
-    };
+    // load file containing the problems and parse it from JSON
+    $.getJSON( "/problems.json", function(result) {
+        // go through problems and prepare them
+        for (var i = 0; i < result.data.problems.length; ++i) {
+            // set the problem-weight propers
+            result.data.problems[i].problemWeight = result.data.problems[i].weight;
 
-    // add problems
-    problemsToAdd.children = problemsInput;
+            // set line number
+            // TODO
+            result.data.problems[i].lineNumber = getLineNumberForStartPosition(result.data.problems[i].position.start);
+        };
 
-    // draw visualization
-    var myFlower = new CodeFlower("#visualization", $(window).width(), $(window).height());
-    myFlower.update(problemsToAdd);
+        // add the first node
+        var problemsToAdd = {
+            "message": "root",
+            "problemWeight": 1
+        };
 
+        // add problems
+        problemsToAdd.children = result.data.problems;
+
+        // draw visualization
+        var myFlower = new CodeFlower("#visualization", 500, 500);
+        myFlower.update(problemsToAdd);
+    })
+    .fail(function() {
+        alert( "error" );
+    });
+
+    // Function to get line number for string
+    function getLineNumberForStartPosition(start) {
+        // console.log("start: " + start);
+        var characterCountEndThisLine, characterCountEndNextLine;
+        // var charactersPassed = 0;
+        // for (i=0;i < arrayOfLines.length-1;i++) {
+        //     characterCountEndThisLine = charactersPassed + arrayOfLines[i].length;
+        //     characterCountEndNextLine = charactersPassed + arrayOfLines[i+1].length;
+
+        //     if (characterCountEndNextLine > start) {
+        //         console.log("this: " + characterCountEndThisLine);
+        //         console.log("next: " + characterCountEndNextLine);
+        //         return i+1;
+        //     } else {
+        //         charactersPassed = charactersPassed +  characterCountEndThisLine;
+        //     }
+        // }
+        // return 1;
+        var i = 0;
+        while (start > 0) {
+            start = start - arrayOfLines[i].length;
+            i++;
+        }
+        return i;
+    }
 });

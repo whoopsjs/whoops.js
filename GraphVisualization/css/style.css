@@ -3,6 +3,11 @@
   padding: 0;
 }
 
+/* Floats */
+/*.float--right   { float:right!important; }
+.float--left    { float:left !important; }
+.float--none    { float:none !important; }
+*/
 circle.node {
   cursor: pointer;
   stroke: #fff;
@@ -30,4 +35,71 @@ line.link {
   fill: none;
   stroke: #9ecae1;
   stroke-width: 1.5px;
+}
+
+#visualization svg {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Responsive Grid */
+/*  SECTIONS  */
+.section {
+  clear: both;
+  padding: 0px;
+  margin: 0px;
+}
+
+/*  COLUMN SETUP  */
+.col {
+  display: block;
+  float:left;
+  margin: 1% 0 1% 0.8%;
+}
+.col:first-child { margin-left: 0; }
+
+
+/*  GROUPING  */
+.group:before,
+.group:after {
+  content:"";
+  display:table;
+}
+.group:after {
+  clear:both;
+}
+.group {
+    zoom:1; /* For IE 6/7 */
+}
+
+
+/*  GRID OF THREE  */
+.span_3_of_3 {
+  width: 100%;
+}
+.span_2_of_3 {
+  width: 66.4%;
+}
+.span_1_of_3 {
+  width: 32.8%;
+}
+
+/*  GO FULL WIDTH AT LESS THAN 800 PIXELS */
+
+@media only screen and (max-width: 800px) {
+  .col {
+    margin: 1% 0 1% 0%;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .span_3_of_3 {
+    width: 100%;
+  }
+  .span_2_of_3 {
+    width: 100%;
+  }
+  .span_1_of_3 {
+    width: 100%;
+  }
 }

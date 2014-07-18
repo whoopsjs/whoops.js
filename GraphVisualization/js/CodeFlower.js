@@ -147,16 +147,26 @@ CodeFlower.prototype.click = function(d) {
   if (d.children) {
     d._children = d.children;
     d.children = null;
+
+    // remove all previous line highlight
+    $('.line.highlighted').removeClass('highlighted');
   } else {
     d.children = d._children;
     d._children = null;
+
+    // remove all previous line highlight
+    $('.line.highlighted').removeClass('highlighted');
+
+    // add line highlight
+    $('.line.number' + d.lineNumber).addClass('highlighted');
+
   }
   this.update();
 };
 
 CodeFlower.prototype.mouseover = function(d) {
   this.text.attr('transform', 'translate(' + d.x + ',' + (d.y - 5 - (d.children ? 3.5 : Math.sqrt(d.size) / 2)) + ')')
-    .text(d.message + " - weight: " + d.problemWeight)
+    .text(d.message + " - weight: " + d.problemWeight + " - line: " + d.lineNumber)
     .style('display', 'block');
 };
 

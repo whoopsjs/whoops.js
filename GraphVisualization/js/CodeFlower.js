@@ -166,7 +166,7 @@ CodeFlower.prototype.click = function(d) {
 
 CodeFlower.prototype.mouseover = function(d) {
   this.text.attr('transform', 'translate(' + d.x + ',' + (d.y - 5 - (d.children ? 3.5 : Math.sqrt(d.size) / 2)) + ')')
-    .text(d.message + " - weight: " + d.problemWeight)
+    .text(d.message + " - weight: " + d.problemWeight + " - line: " + d.lineNumber)
     .style('display', 'block');
 };
 

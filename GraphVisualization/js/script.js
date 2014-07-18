@@ -35,7 +35,7 @@ $(document).ready(function(){
 
             // set line number
             // TODO
-            // result.data.problems[i].lineNumber = getLineNumberForStartPosition(result.data.problems[i].position.start);
+            result.data.problems[i].lineNumber = getLineNumberForStartPosition(result.data.problems[i].position.start);
         };
 
         // add the first node

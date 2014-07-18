@@ -27,16 +27,19 @@ document.onreadystatechange = function() {
           var input2 = 'Hello World!';
           input2 = prompt('Evil Dom Input!');
           span.appendChild(document.createTextNode(input2));
+          span.appendChild(document.createTextNode(evil()));
 				}
 			}
 		};
 		document.body.appendChild(button1);
     document.body.appendChild(span);
 	}
+  
+  function evil(){
+    var evilInput = prompt('Another Evil Dom Input!');
+    return evilInput;
+  }
 };
-
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //                           Direct Execution Sinks                           //
 //          https://code.google.com/p/domxsswiki/wiki/ExecutionSinks          //

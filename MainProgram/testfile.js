@@ -2,9 +2,8 @@
 //                                  DOM I/O                                   //
 ////////////////////////////////////////////////////////////////////////////////
 
-// TODO
 document.onreadystatechange = function() {
-	if(document.readyState == 'complete') {   
+	if (document.readyState == 'complete') {
     var span = document.createElement('span');
 		var input1 = document.createElement('input');
     var input3 = document.createElement('input');
@@ -14,14 +13,10 @@ document.onreadystatechange = function() {
 		button1.appendChild(button1text);
 		button1.onclick = function() {
 			var inputs = document.getElementsByTagName('input');
-			for (var i = 0; i < inputs.length; i++)
-			{
-				if(inputs[0].value === '')
-				{
+			for (var i = 0; i < inputs.length; i++) {
+				if (inputs[0].value === '') {
 					inputs[0].style.borderColor = 'red';
-				}
-				else
-				{
+				} else {
 					inputs[0].style.borderColor = 'lime';
           span.appendChild(document.createTextNode(inputs[0].value));
           var input2 = 'Hello World!';
@@ -34,12 +29,13 @@ document.onreadystatechange = function() {
 		document.body.appendChild(button1);
     document.body.appendChild(span);
 	}
-  
-  function evil(){
+
+  function evil() {
     var evilInput = prompt('Another Evil Dom Input!');
     return evilInput;
   }
 };
+
 ////////////////////////////////////////////////////////////////////////////////
 //                           Direct Execution Sinks                           //
 //          https://code.google.com/p/domxsswiki/wiki/ExecutionSinks          //

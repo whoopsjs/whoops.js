@@ -43,7 +43,6 @@ function getLastName(a, obj){
 
 //Gets the assigned value for an assignment
 function getAssignedValue(node){
-	console.log(node.type);
 	if(node.type === 'CallExpression'){
 		if(node.callee.name === undefined){
 			return node.callee.name;

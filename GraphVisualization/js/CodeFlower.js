@@ -160,6 +160,11 @@ CodeFlower.prototype.click = function(d) {
     // add line highlight
     $('.line.number' + d.lineNumber).addClass('highlighted');
 
+    // Scroll to line
+    $('html, body').animate({
+        scrollTop: $('.number' + d.lineNumber).offset().top
+    }, 1000);
+
   }
   this.update();
 };

@@ -93,13 +93,25 @@ program
         var app = express();
 
         // set directory to deliver
-        app.use(serveStatic(__dirname.replace('MainProgram', 'GraphVisualization')));
+        app.use(serveStatic(__dirname.replace('MainProgram', 'GraphVisualization') + '/dist'));
+
+        // Allow cross origin requests
+        app.use(function (req, res, next) {
+          res.header('Access-Control-Allow-Origin', '*');
+          res.header('Access-Control-Allow-Headers', 'Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With');
+          res.header('Access-Control-Allow-Methods', 'GET, PUT, POST');
+          return next();
+        });
+
+        // Serve problems.json
         app.get('/problems.json', function (req, res, next) {
           // set ControlFlowGraph to null to prevent circular errors
           tree.data.cfg = null;
           res.json(200, tree);
         });
-        app.get('/code.js', function (req, res, next) {
+
+        // Serve code
+        app.get('/code', function (req, res, next) {
           fs.readFile(file, 'utf8', function (err, data) {
             res.send(200, data);
           });
@@ -108,7 +120,7 @@ program
         // set portnumber to listen to
         app.listen(portNumber);
 
-        open('http://localhost:' + portNumber);
+        // open('http://localhost:' + portNumber);
       }
     });
   });

@@ -9,21 +9,28 @@
 angular.module('graphVisualizationApp')
   .directive('prism', function () {
     return {
-      template: '<pre data-line="{{highlights}}"><code data-language="{{language}}">{{source}}</code></pre>',
+      template: '<pre data-line="{{lineHighlights}}"><code data-language="{{language}}">{{problems.source}}</code></pre>',
       restrict: 'E',
       scope: {
         source: '=',
-        lineNumbers: '=',
-        highlights: '=',
+        problems: '=',
         language: '@',
+        lineHighlights: '='
       },
       link: function postLink(scope, element) {
-        scope.$watch('source', function (source) {
-          if (source) {
-            // element.find('code').attr('data-language', scope.language);
+        scope.$watch('problems', function (problems) {
+          if (problems) {
+            // scope.problems = scope.problems || {};
+            // scope.lineHighlights = scope.problems.keys();
+            // console.log(scope.lineHighlights);
             window.Rainbow.color(function () { //source, attrs.language, function (highlightedCode) {
-              scope.highlights.forEach(function (highlight) {
-                element.find('[data-line=\'' + highlight + '\']').addClass('highlight');
+              console.log(scope.problems);
+              scope.problems.data.problems.forEach(function (problem) {
+                element.find('[data-line=\'' + problem.position.line + '\']').addClass('highlight').popover({
+                  content: problem.message,
+                  placement: 'bottom',
+                  trigger: 'hover'
+                });
               });
 
             });

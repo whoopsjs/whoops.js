@@ -105,17 +105,20 @@ program
 
         // Serve problems.json
         app.get('/problems.json', function (req, res, next) {
-          // set ControlFlowGraph to null to prevent circular errors
-          tree.data.cfg = null;
-          res.json(200, tree);
+          fs.readFile(file, 'utf8', function (err, data) {
+            // set ControlFlowGraph to null to prevent circular errors
+            tree.data.cfg = null;
+            tree.source = data;
+            res.json(200, tree);
+          });
         });
 
         // Serve code
-        app.get('/code', function (req, res, next) {
-          fs.readFile(file, 'utf8', function (err, data) {
-            res.send(200, data);
-          });
-        });
+        // app.get('/code', function (req, res, next) {
+        //   fs.readFile(file, 'utf8', function (err, data) {
+        //     res.send(200, data);
+        //   });
+        // });
 
         // set portnumber to listen to
         app.listen(portNumber);

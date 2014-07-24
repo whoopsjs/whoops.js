@@ -20,11 +20,7 @@ angular.module('graphVisualizationApp')
       link: function postLink(scope, element) {
         scope.$watch('problems', function (problems) {
           if (problems) {
-            // scope.problems = scope.problems || {};
-            // scope.lineHighlights = scope.problems.keys();
-            // console.log(scope.lineHighlights);
-            window.Rainbow.color(function () { //source, attrs.language, function (highlightedCode) {
-              console.log(scope.problems);
+            window.Rainbow.color(function () {
               scope.problems.data.problems.forEach(function (problem) {
                 element.find('[data-line=\'' + problem.position.line + '\']').addClass('highlight').popover({
                   content: problem.message,

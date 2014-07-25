@@ -6,6 +6,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 pre {
   padding-left: 50px;
   padding-bottom: 30px;
+  margin-top: 25px;
   // span {
   //   display: inline-block;
   // }
@@ -19,8 +20,13 @@ pre {
   margin-right: 20px;
   margin-left: -50px;
   display: block;
-}
-.line.highlight{
-  background-color: rgba(217, 83, 79, 0.3);
-  cursor: pointer;
+  &.highlight {
+    cursor: pointer;
+    &.danger {
+      background-color: rgba(217, 83, 79, 0.3);
+    }
+    &.warning {
+      background-color: rgba(240,173,78, 0.3);
+    }
+  }
 }

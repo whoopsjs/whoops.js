@@ -9,23 +9,26 @@
 angular.module('graphVisualizationApp')
   .directive('prism', function () {
     return {
-      template: '<pre data-line="{{lineHighlights}}"><code data-language="{{language}}">{{problems.source}}</code></pre>',
+      template: '<pre><code data-language="{{language}}">{{problems.source}}</code></pre>',
       restrict: 'E',
       scope: {
-        source: '=',
         problems: '=',
-        language: '@',
-        lineHighlights: '='
+        language: '@'
       },
       link: function postLink(scope, element) {
         scope.$watch('problems', function (problems) {
           if (problems) {
             window.Rainbow.color(function () {
               scope.problems.data.problems.forEach(function (problem) {
-                element.find('[data-line=\'' + problem.position.line + '\']').addClass('highlight').popover({
-                  content: problem.message,
+                var level = problem.type === 'risk' || 'error' ? 'danger' : 'warning';
+                var lineElement = element.find('[data-line=\'' + problem.position.line + '\']');
+                lineElement.addClass('highlight');
+                lineElement.addClass(level);
+                lineElement.popover({
+                  content: '<span class="label label-' + level + '">' + problem.type + ':</span> ' + problem.message,
                   placement: 'bottom',
-                  trigger: 'hover'
+                  trigger: 'hover',
+                  html: true
                 });
               });
 

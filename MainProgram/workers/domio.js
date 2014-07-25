@@ -325,14 +325,13 @@ module.exports = function (tree) {
             }
             name = memNode.object.name;
           }
-		  else if(subNode.arguments[0].type === 'Literal'){
-				for (var i = 0; i < inputs.length; i++) {
-					if (inputs[i][1] === subNode.arguments[0].value) {
-						name = inputs[i][0];
-					}
-				}
-		  }
-		  
+          else if(subNode.arguments[0].type === 'Literal'){
+            for (var i = 0; i < inputs.length; i++) {
+              if (inputs[i][1] === subNode.arguments[0].value) {
+                name = inputs[i][0];
+              }
+            }
+          }	  
           //If value to be appanded come from a function, then take the function name.
 					else if(subNode.arguments[0].type === 'CallExpression'){
             var nameNode = subNode.arguments[0];
@@ -364,10 +363,10 @@ module.exports = function (tree) {
             && dangerousNode(subNode.arguments[0])){
 						pushWarning('risk', name, node.start, node.end);
           }
-		  //Push warning for function that might be risky
-		  else if(name !== undefined){
-			pushRisk(name, node.start, node.end)
-		  }
+          //Push warning for function that might be risky
+          else if(name !== undefined){
+          pushRisk(name, node.start, node.end)
+          }
         }
       }
     }

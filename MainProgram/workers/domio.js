@@ -139,6 +139,19 @@ module.exports = function (tree) {
 		});
 	}
 	
+	//called when a function is used that might be risky
+	function pushRisk(name, start, end){
+		tree.data.problems.push({
+			'type': 'warning',
+			'message': 'To put the user defined variable ' + name + ' into the DOM tree might be a risk',
+			'weight': 3,
+			'position': {
+			'start': start,
+			'end': end
+			}
+		});
+	}
+	
   //First big walk creates our lists.
   walk.recursive(tree.data.cfg, {}, {
     //We will have to go to the VariableDeclarators over the VariableDeclarations for some reason.
@@ -280,8 +293,9 @@ module.exports = function (tree) {
   walk.recursive(tree.data.cfg, {}, {
     CallExpression: function (node, state, c) {
       //Every appended Object will (for now) throw an error, even if the container isn't added to the body.
-      if(node.callee.property !== undefined 
-        && node.callee.property.name === 'appendChild'){
+      if((node.callee.property !== undefined 
+        && node.callee.property.name === 'appendChild') || 
+		(node.callee.property !== undefined && node.callee.property.name === 'createElement')){
         //Go into lowest CallExpression in chain until you reach a document call
         var subNode = node;
         while(subNode.arguments[0] !== undefined 
@@ -311,6 +325,14 @@ module.exports = function (tree) {
             }
             name = memNode.object.name;
           }
+		  else if(subNode.arguments[0].type === 'Literal'){
+				for (var i = 0; i < inputs.length; i++) {
+					if (inputs[i][1] === subNode.arguments[0].value) {
+						name = inputs[i][0];
+					}
+				}
+		  }
+		  
           //If value to be appanded come from a function, then take the function name.
 					else if(subNode.arguments[0].type === 'CallExpression'){
             var nameNode = subNode.arguments[0];
@@ -342,6 +364,10 @@ module.exports = function (tree) {
             && dangerousNode(subNode.arguments[0])){
 						pushWarning('risk', name, node.start, node.end);
           }
+		  //Push warning for function that might be risky
+		  else if(name !== undefined){
+			pushRisk(name, node.start, node.end)
+		  }
         }
       }
     }

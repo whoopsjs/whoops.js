@@ -3,9 +3,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // TODO
+=======
+>>>>>>> 8d34f5e517c5a1942db8a3d97e602bacbe436fa2
 document.onreadystatechange = function() {
-	if(document.readyState == 'complete') {   
+	if (document.readyState == 'complete') {
     var span = document.createElement('span');
 		var input1 = document.createElement('input');
     var input3 = document.createElement('input');
@@ -27,6 +30,7 @@ document.onreadystatechange = function() {
 		button1.onclick = function() {
 			var inputs = document.getElementsByTagName('input');
 <<<<<<< HEAD
+<<<<<<< HEAD
 			for (var i = 0; i < inputs.length; i++)
 			{
 				if(inputs[0].value === '')
@@ -41,6 +45,12 @@ document.onreadystatechange = function() {
 					inputs[0].style.borderColor = 'red';
 				} else {
 >>>>>>> feature/worker_domio
+=======
+			for (var i = 0; i < inputs.length; i++) {
+				if (inputs[0].value === '') {
+					inputs[0].style.borderColor = 'red';
+				} else {
+>>>>>>> 8d34f5e517c5a1942db8a3d97e602bacbe436fa2
 					inputs[0].style.borderColor = 'lime';
           span.appendChild(document.createTextNode(inputs[0].value));
           var input2 = 'Hello World!';
@@ -59,6 +69,7 @@ document.onreadystatechange = function() {
 		document.body.appendChild(button1);
     document.body.appendChild(span);
 	}
+<<<<<<< HEAD
   
   function evil(){
 =======
@@ -83,6 +94,10 @@ document.onreadystatechange = function() {
 
   function evil() {
 >>>>>>> feature/worker_domio
+=======
+
+  function evil() {
+>>>>>>> 8d34f5e517c5a1942db8a3d97e602bacbe436fa2
     var evilInput = prompt('Another Evil Dom Input!');
     return evilInput;
   }

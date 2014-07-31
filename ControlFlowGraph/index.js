@@ -5,70 +5,68 @@ var acorn = require('acorn'),
 
 var ast;
 
-module.exports = function (filename, cb) {
+module.exports = function (input, cb) {
 
-  fs.readFile(filename, 'utf8', function (err, input) {
-    if (err) {
-      cb(err);
-      return;
-    }
-    var options = {
-      strictSemicolons: true
-    };
-    var lines = S(input).lines();
+  var options = {
+    strictSemicolons: true
+  };
+  var lines = S(input).lines();
+  try {
     ast = acorn.parse(lines.join('\n'), options);
-    var functions = {
+  } catch (error){
+    return cb(error);
+  }
+  var functions = {
 
-      WhileStatement: function (node, state, c) {
-        fillNode(node, state);
-        c(node.body, state);
-        fillNode(node, state);
-      },
+    WhileStatement: function (node, state, c) {
+      fillNode(node, state);
+      c(node.body, state);
+      fillNode(node, state);
+    },
 
-      ForInStatement: function (node, state, c) {
-        fillNode(node, state);
-        c(node.body, state);
-        fillNode(node, state);
-      },
+    ForInStatement: function (node, state, c) {
+      fillNode(node, state);
+      c(node.body, state);
+      fillNode(node, state);
+    },
 
-      ForStatement: function (node, state, c) {
-        fillNode(node, state);
-        c(node.body, state);
-        fillNode(node, state);
-      },
+    ForStatement: function (node, state, c) {
+      fillNode(node, state);
+      c(node.body, state);
+      fillNode(node, state);
+    },
 
-      IfStatement: function (node, state, c) {
-        fillNode(node, state);
-        c(node.consequent, state);
-        var consequentEnd = state.previous;
-        state.previous = [];
-        fillNode(node, state);
-        if (node.alternate !== null) {
-          c(node.alternate, state);
-        }
-        state.previous = state.previous.concat(consequentEnd);
-      },
-
-      ExpressionStatement: function (node, state, c) {
-        fillNode(node, state);
-        expressionHandler(node.expression);
-      },
-
-      VariableDeclaration: function (node, state, c) {
-        fillNode(node, state);
-      },
-
-      FunctionDeclaration: function (node, state, c) {
-        var previous = state.previous;
-        state.previous = [];
-        c(node.body, state);
-        state.previous = previous;
-        fillNode(node, state);
+    IfStatement: function (node, state, c) {
+      fillNode(node, state);
+      c(node.consequent, state);
+      var consequentEnd = state.previous;
+      state.previous = [];
+      fillNode(node, state);
+      if (node.alternate !== null) {
+        c(node.alternate, state);
       }
-    };
-    walk.recursive(ast, {}, functions);
-    cb(null, ast);
-  });
+      state.previous = state.previous.concat(consequentEnd);
+    },
+
+    ExpressionStatement: function (node, state, c) {
+      fillNode(node, state);
+      expressionHandler(node.expression);
+    },
+
+    VariableDeclaration: function (node, state, c) {
+      fillNode(node, state);
+    },
+
+    FunctionDeclaration: function (node, state, c) {
+      var previous = state.previous;
+      state.previous = [];
+      c(node.body, state);
+      state.previous = previous;
+      fillNode(node, state);
+    }
+  };
+  walk.recursive(ast, {}, functions);
+  cb(null, ast);
 };
 
 function fillNode(node, state) {

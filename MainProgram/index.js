@@ -5,6 +5,9 @@ var async = require('async');
 var util = require('util');
 var open = require("open");
 
+// set port number
+var portNumber = 3000;
+
 
 //Load workers
 var workers = [];
@@ -25,12 +28,38 @@ function applyWorkers(controlFlowGraph) {
       cfg: controlFlowGraph,
       problems: []
     }
-  }
+  };
   for (var i = workers.length - 1; i >= 0; i--) {
     workers[i].call(null, tree);
   };
   console.log("All workers have finished.");
   return tree;
+}
+
+function createServer(portNumber) {
+  // Create web server
+  var express = require('express'),
+    serveStatic = require('serve-static'),
+    bodyParser = require('body-parser');
+
+  // create server
+  var app = express();
+
+  // set directory to deliver
+  app.use(serveStatic(__dirname.replace('MainProgram', 'GraphVisualization') + '/dist'));
+  app.use(bodyParser.json());
+  // app.use(bodyParser.urlencoded());
+
+  // Allow cross origin requests
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST');
+    return next();
+  });
+
+  app.listen(portNumber);
+  return app;
 }
 
 
@@ -50,7 +79,7 @@ program
 
         var tree = applyWorkers(result);
 
-        console.log("Problems:")
+        console.log("Problems:");
         console.log(util.inspect(tree.data.problems, {
           showHidden: false,
           depth: null,
@@ -58,7 +87,7 @@ program
         }));
 
         if (program.showGraph) {
-          console.log("Graph:")
+          console.log("Graph:");
           console.log(util.inspect(tree.data.cfg, {
             showHidden: false,
             depth: null,
@@ -73,58 +102,56 @@ program
   .command('visualize <file>')
   .description('open a visualization of the inspected file in a browser')
   .action(function (file) {
+    fs.readFile(file, 'utf8', function (err, input) {
 
-    cfg(file, function (err, result) {
-      if (err) {
-        console.error(err);
-      } else {
+      cfg(input, function (err, result) {
+        if (err) {
+          console.error(err);
+        } else {
 
-        var tree = applyWorkers(result);
-        console.log("Opening Visualization...");
+          var tree = applyWorkers(result);
+          console.log("Opening Visualization...");
 
-        // Create web server
-        var express = require('express'),
-          serveStatic = require('serve-static');
+          var app = createServer(portNumber);
 
-        // set port number
-        var portNumber = 3000;
-
-        // create server
-        var app = express();
-
-        // set directory to deliver
-        app.use(serveStatic(__dirname.replace('MainProgram', 'GraphVisualization') + '/dist'));
-
-        // Allow cross origin requests
-        app.use(function (req, res, next) {
-          res.header('Access-Control-Allow-Origin', '*');
-          res.header('Access-Control-Allow-Headers', 'Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With');
-          res.header('Access-Control-Allow-Methods', 'GET, PUT, POST');
-          return next();
-        });
-
-        // Serve problems.json
-        app.get('/problems.json', function (req, res, next) {
-          fs.readFile(file, 'utf8', function (err, data) {
+          // Serve problems.json
+          app.get('/problems.json', function (req, res, next) {
             // set ControlFlowGraph to null to prevent circular errors
             tree.data.cfg = null;
-            tree.source = data;
+            tree.source = input;
             res.json(200, tree);
           });
-        });
 
-        // Serve code
-        // app.get('/code', function (req, res, next) {
-        //   fs.readFile(file, 'utf8', function (err, data) {
-        //     res.send(200, data);
-        //   });
-        // });
+          // set portnumber to listen to
+          // app.listen(portNumber);
 
-        // set portnumber to listen to
-        app.listen(portNumber);
+          open('http://localhost:' + portNumber + '/#/visualize');
+        }
+      });
+    });
+  });
 
-        // open('http://localhost:' + portNumber);
-      }
+program
+  .command('serve')
+  .description('Start a server for remote file uploading and analyzing')
+  .action(function () {
+    var app = createServer(portNumber);
+
+    app.post('/problems.json', function (req, res, next) {
+      cfg(req.body.source, function (err, result) {
+
+        if (err) {
+          res.json({
+            error: err
+          });
+          return next();
+        }
+
+        var tree = applyWorkers(result);
+        tree.data.cfg = null;
+        tree.source = req.body.source;
+        res.json(200, tree);
+      });
     });
   });
 

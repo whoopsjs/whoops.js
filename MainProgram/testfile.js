@@ -27,6 +27,18 @@ document.onreadystatechange = function() {
 			}
 		};
 		document.body.appendChild(button1);
+		
+		var evilTextArea = document.createElement('TEXTAREA');
+		document.body.appendChild(evilTextArea);
+		
+		var evilForm = document.createElement('FORM');
+		evilForm.innerHTML = 'Im so evil!';
+		document.body.appendChild(evilForm);
+		
+		var evilLabel = document.createElement('LABEL');
+		evilLabel.innerHTML = 'Hi';
+		document.body.appendChild(evilLabel);
+
     document.body.appendChild(span);
 	}
 

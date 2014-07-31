@@ -22,7 +22,6 @@ angular.module('graphVisualizationApp')
             line++;
           }
           problem.position.line = line;
-          //data.source = [data.source.slice(0, problem.position.start), '<span class="highlight">', data.source.slice(problem.position.start, problem.position.end), '</span>', data.source.slice(problem.position.end)].join('');
         });
       });
     }

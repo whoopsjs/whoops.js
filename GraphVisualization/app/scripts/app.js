@@ -23,9 +23,6 @@ angular
       'matches': {},
       'pattern': /(\/)(?!\*)(.+)(\/)([igm]{0,3})/g
     }]);
-    // window.Rainbow.onHighlight(function (block, language) {
-    //   console.log(block, 'for language', language, 'was highlighted');
-    // });
     window.Rainbow.color();
     $routeProvider
       .when('/', {

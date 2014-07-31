@@ -7,9 +7,6 @@ pre {
   padding-left: 50px;
   padding-bottom: 30px;
   margin-top: 25px;
-  // span {
-  //   display: inline-block;
-  // }
 }
 
 .line {
@@ -29,4 +26,8 @@ pre {
       background-color: rgba(240,173,78, 0.3);
     }
   }
+}
+
+span.highlight {
+  background-color: rgba(217, 83, 79, 0.3);
 }

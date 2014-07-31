@@ -12,16 +12,17 @@ angular.module('graphVisualizationApp')
     function ($scope, $http) {
       $http.get('http://localhost:3000/problems.json').success(function (data) {
         $scope.problems = data;
-        var arrayOfLines = data.source.split(/\r\n?|\n/);
+        var arrayOfLines = window.S(data.source).lines();
+        data.source = arrayOfLines.join('\n');
         data.data.problems.forEach(function (problem) {
           var line = 0;
-          var start = problem.position.start;
-          while (start > 0) {
-            start = start -1 - arrayOfLines[line].length;
+          var start = 0;
+          while (start <= problem.position.start) {
+            start += arrayOfLines[line].length + 1;
             line++;
           }
-          problem.position.line = line + 1;
-          // $scope.problemLines[line] = problem;
+          problem.position.line = line;
+          //data.source = [data.source.slice(0, problem.position.start), '<span class="highlight">', data.source.slice(problem.position.start, problem.position.end), '</span>', data.source.slice(problem.position.end)].join('');
         });
       });
     }

@@ -2,243 +2,252 @@
 //                                  DOM I/O                                   //
 ////////////////////////////////////////////////////////////////////////////////
 
-// TODO
+document.onreadystatechange = function() {
+	if (document.readyState == 'complete') {
+    var span = document.createElement('span');
+		var input1 = document.createElement('input');
+    var input3 = document.createElement('input');
+		document.body.appendChild(input1);
+		var button1 = document.createElement('button');
+		var button1text = document.createTextNode('push me');
+		button1.appendChild(button1text);
+		button1.onclick = function() {
+			var inputs = document.getElementsByTagName('input');
+			for (var i = 0; i < inputs.length; i++) {
+				if (inputs[0].value === '') {
+					inputs[0].style.borderColor = 'red';
+				} else {
+					inputs[0].style.borderColor = 'lime';
+          span.appendChild(document.createTextNode(inputs[0].value));
+          var input2 = 'Hello World!';
+          input2 = prompt('Evil Dom Input!');
+          span.appendChild(document.createTextNode(input2));
+          span.appendChild(document.createTextNode(evil()));
+				}
+			}
+		};
+		document.body.appendChild(button1);
+    document.body.appendChild(span);
+	}
 
+  function evil() {
+    var evilInput = prompt('Another Evil Dom Input!');
+    return evilInput;
+  }
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 //                           Direct Execution Sinks                           //
 //          https://code.google.com/p/domxsswiki/wiki/ExecutionSinks          //
 ////////////////////////////////////////////////////////////////////////////////
 
-var userControlledValue = document.getElementById("input");
-var scriptDOMElement = document.getElementById("script");
-var anyDOMElement = document.getElementById("element");
+var userControlledValue = document.getElementById('input');
+var hTMLScriptElement = document.getElementById('script');
+var hTMLElement = document.getElementById('element');
 
 // Function Name: eval
-// Argument:      CallExpression.arguments[0]
+// Argument:      first
 // Browser:       All
-// Example:       eval("jsCode"+usercontrolledVal )
-// Identifier:    {type: 'CallExpression', callee.name: 'eval'}
-eval("console.log(\"" + userControlledValue + "\");");
+// Identifier:    {type: 'CallExpression', callee.name: 'eval', arguments[0]: isUserControlledValue}
+eval('console.log(\'' + userControlledValue + '\');');
 
 // Function Name: Function
-// Argument:      first if there's one, the last if >1 args
+// Argument:      last
 // Browser:       All
-// Example:       Function("jsCode"+usercontrolledVal ) ,
-//                Function("arg","arg2","jsCode"+usercontrolledVal )
-// TODO does 'Function(String)' work this way?
-/*
-(Function(userControlledValue) {
-    console.log(userControlledValue);
-}());
-(Function("arg", "arg2", userControlledValue) {
-    console.log(userControlledValue);
-}());
-*/
+// Identifier:    {type: 'CallExpression', callee.name: 'Function', arguments[arguments.length - 1]: isUserControlledValue}
+Function('arg', 'arg2', 'console.log(\'' + userControlledValue + '\');');
 
 // Function Name: setTimeout
-// Argument:      CallExpression.arguments[0]
+// Argument:      first if it is a string
 // Browser:       All
-// Example:       setTimeout("jsCode"+usercontrolledVal ,timeMs)
-// Identifier:    {type: 'CallExpression', callee.name: 'setTimeout'}
-setTimeout("console.log(\"" + userControlledValue + "\");", 1000);
+// Identifier:    {type: 'CallExpression', callee.name: 'setTimeout', arguments[0]: isUserControlledValue}
+setTimeout('console.log(\'' + userControlledValue + '\');', 1000);
 
 // Function Name: setInterval
-// Argument:      first IIF it is a string
+// Argument:      first if it is a string
 // Browser:       All
-// Example:       setInterval("jsCode"+usercontrolledVal ,timMs)
-// Identifier:    {type: 'CallExpression', callee.name: 'setInterval'}
-setInterval("console.log(\"" + userControlledValue + "\");", 1000);
+// Identifier:    {type: 'CallExpression', callee.name: 'setInterval', arguments[0]: isUserControlledValue}
+setInterval('console.log(\'' + userControlledValue + '\');', 1000);
 
 // Function Name: setImmediate
-// Argument:      CallExpression.arguments[0]
+// Argument:      first if it is a string
 // Browser:       IE 10+
-// Example:       setImmediate("jsCode"+usercontrolledVal )
-// Identifier:    {type: 'CallExpression', callee.name: 'setImmediate'}
-setImmediate("console.log(\"" + userControlledValue + "\");");
+// Identifier:    {type: 'CallExpression', callee.name: 'setImmediate', arguments[0]: isUserControlledValue}
+setImmediate('console.log(\'' + userControlledValue + '\');');
 
 // Function Name: execScript
-// Argument:      CallExpression.arguments[0]
+// Argument:      first
 // Browser:       IE 6+
-// Example:       execScript("jsCode"+usercontrolledVal ,"JScript")
-// Identifier:    {type: 'CallExpression', callee.name: 'execScript'}
-execScript("console.log(\"" + userControlledValue + "\");", "JScript");
+// Identifier:    {type: 'CallExpression', callee.name: 'execScript', arguments[0]: isUserControlledValue, arguments[1]: 'JScript'}
+execScript('console.log(\'' + userControlledValue + '\');', 'JScript');
 
 // Function Name: crypto.generateCRMFRequest
-// Argument:      CallExpression.arguments[0]
+// Argument:      5th
 // Browser:       Firefox 2+
-// Example:       crypto.generateCRMFRequest('CN=0',0,0,null,'jsCode'+usercontrolledVal,384,null,'rsa-dual-use')
-// Identifier:    {type: 'CallExpression', callee.type: 'MemberExpression', callee.object.name: 'crypto', callee.property.name: 'generateCRMFRequest'}
-crypto.generateCRMFRequest("CN=0", 0, 0, null, "console.log(\"" + userControlledValue + "\");", 384, null, "rsa-dual-use");
+// Identifier:    {type: 'CallExpression', callee.type: 'MemberExpression', callee.object.name: 'crypto', callee.property.name: 'generateCRMFRequest', arguments[0]: 'CN=0', arguments[1]: 0, arguments[2]: 0, arguments[3]: null, arguments[4]: isUserControlledValue, arguments[5]: 384, arguments[6]: null, arguments[7]: 'rsa-dual-use'}
+crypto.generateCRMFRequest('CN=0', 0, 0, null, 'console.log(\'' + userControlledValue + '\');', 384, null, 'rsa-dual-use');
 
-// Function Name: ScriptElement.src
-// Argument:      AssignmentExpression.right (== userControlledValue)
-// Browser:       All
-// Example:       script.src = usercontrolledVal
-// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'src'}
-scriptDOMElement.src = userControlledValue;
-
-// Function Name: ScriptElement.text
-// Argument:      AssignmentExpression.right (== userControlledValue)
-// Browser:       Explorer
-// Example:       script.text = 'jsCode'+usercontrolledVal
-// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'text'}
-scriptDOMElement.text = "console.log(\"" + userControlledValue + "\");";
-
-// Function Name: ScriptElement.textContent
-// Argument:      AssignmentExpression.right (== userControlledValue)
-// Browser:       All but IE
-// Example:       script.textContent = 'jsCode'+usercontrolledVal
-// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'textContent'}
-scriptDOMElement.textContent = "console.log(\"" + userControlledValue + "\");";
-
-// Function Name: ScriptElement.innerText
-// Argument:      AssignmentExpression.right (== userControlledValue)
-// Browser:       All but Firefox
-// Example:       script.innerText = 'jsCode'+usercontrolledVal
-// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'scriptDOMElement', left.property.name: 'innerText'}
-scriptDOMElement.innerText = "console.log(\"" + userControlledValue + "\");";
-
-
-// Function Name: anyTag.onEventName
+// Function Name: HTMLScriptElement.src
 // Argument:      assignedValue
 // Browser:       All
-// Example:       anyTag.onclick = 'jsCode'+usercontrolledVal
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLScriptElement, left.property.name: 'src', right: isUserControlledValue}
+hTMLScriptElement.src = 'console.log(\'' + userControlledValue + '\');';
+
+// Function Name: HTMLScriptElement.text
+// Argument:      assignedValue
+// Browser:       Explorer
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLScriptElement, left.property.name: 'text', right: isUserControlledValue}
+hTMLScriptElement.text = 'console.log(\'' + userControlledValue + '\');';
+
+// Function Name: HTMLScriptElement.textContent
+// Argument:      assignedValue
+// Browser:       All but IE
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLScriptElement, left.property.name: 'textContent', right: isUserControlledValue}
+hTMLScriptElement.textContent = 'console.log(\'' + userControlledValue + '\');';
+
+// Function Name: HTMLScriptElement.innerText
+// Argument:      assignedValue
+// Browser:       All but Firefox
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLScriptElement, left.property.name: 'innerText', right: isUserControlledValue}
+hTMLScriptElement.innerText = 'console.log(\'' + userControlledValue + '\');';
+
+
+// Function Name: HTMLElement.on*
+// Argument:      assignedValue
+// Browser:       All
+// Identifier:    {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object: isHTMLElement, left.property.name: 'on*', right: isUserControlledValue}
 // Note:          List compiled from
 //                 https://developer.mozilla.org/en-US/docs/Web/Reference/Events
 //                 using using only non-deprecated standard events
-
-
-// Identifier:     {type: 'AssignmentExpression', left.type: 'MemberExpression', left.object.name: 'anyDOMElement', left.property.name: 'on*'}
+hTMLElement.onabort = 'console.log(\'' + userControlledValue + '\');';
 /*
-anyDOMElement.onabort = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onafterprint = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onanimationend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onanimationiteration = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onanimationstart = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onaudioprocess = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onbeforeprint = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onbeforeunload = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onbeginEvent = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onblocked = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onblur = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncached = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncanplay = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncanplaythrough = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onchargingchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onchargingtimechange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onchecking = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onclick = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onclose = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncompassneedscalibration = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncomplete = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncompositionend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncompositionstart = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncompositionupdate = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncontextmenu = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncopy = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oncut = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondblclick = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondevicelight = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondevicemotion = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondeviceorientation = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondeviceproximity = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondischargingtimechange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondownloading = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondrag = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondragend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondragenter = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondragleave = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondragover = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondragstart = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondrop = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ondurationchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onemptied = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onended = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onendEvent = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onerror = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onfocus = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onfocusin = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onfocusout = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onfullscreenchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onfullscreenerror = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ongamepadconnected = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ongamepaddisconnected = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onhashchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oninput = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.oninvalid = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onkeydown = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onkeypress = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onkeyup = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onlevelchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onload = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onloadeddata = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onloadedmetadata = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onloadend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onloadstart = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmessage = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmousedown = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmouseenter = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmouseleave = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmousemove = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmouseout = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmouseover = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onmouseup = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onnoupdate = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onobsolete = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onoffline = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ononline = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onopen = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onorientationchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpagehide = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpageshow = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpaste = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpause = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpointerlockchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpointerlockerror = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onplay = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onplaying = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onpopstate = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onprogress = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onratechange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onreadystatechange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onrepeatEvent = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onreset = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onresize = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onscroll = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onseeked = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onseeking = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onselect = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onshow = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onstalled = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onstorage = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onsubmit = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onsuccess = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onsuspend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGAbort = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGError = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGLoad = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGResize = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGScroll = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGUnload = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onSVGZoom = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontimeout = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontimeupdate = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontouchcancel = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontouchend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontouchenter = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontouchleave = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontouchmove = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontouchstart = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.ontransitionend = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onunload = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onupdateready = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onupgradeneeded = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onuserproximity = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onversionchange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onvisibilitychange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onvolumechange = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onwaiting = "console.log(\"" + userControlledValue + "\");";
-anyDOMElement.onwheel = "console.log(\"" + userControlledValue + "\");";
+hTMLElement.onafterprint = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onanimationend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onanimationiteration = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onanimationstart = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onaudioprocess = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onbeforeprint = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onbeforeunload = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onbeginEvent = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onblocked = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onblur = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncached = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncanplay = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncanplaythrough = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onchargingchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onchargingtimechange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onchecking = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onclick = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onclose = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncompassneedscalibration = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncomplete = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncompositionend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncompositionstart = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncompositionupdate = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncontextmenu = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncopy = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oncut = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondblclick = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondevicelight = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondevicemotion = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondeviceorientation = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondeviceproximity = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondischargingtimechange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondownloading = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondrag = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondragend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondragenter = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondragleave = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondragover = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondragstart = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondrop = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ondurationchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onemptied = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onended = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onendEvent = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onerror = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onfocus = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onfocusin = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onfocusout = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onfullscreenchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onfullscreenerror = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ongamepadconnected = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ongamepaddisconnected = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onhashchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oninput = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.oninvalid = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onkeydown = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onkeypress = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onkeyup = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onlevelchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onload = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onloadeddata = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onloadedmetadata = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onloadend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onloadstart = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmessage = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmousedown = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmouseenter = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmouseleave = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmousemove = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmouseout = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmouseover = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onmouseup = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onnoupdate = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onobsolete = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onoffline = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ononline = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onopen = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onorientationchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpagehide = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpageshow = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpaste = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpause = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpointerlockchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpointerlockerror = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onplay = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onplaying = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onpopstate = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onprogress = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onratechange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onreadystatechange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onrepeatEvent = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onreset = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onresize = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onscroll = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onseeked = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onseeking = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onselect = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onshow = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onstalled = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onstorage = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onsubmit = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onsuccess = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onsuspend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGAbort = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGError = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGLoad = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGResize = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGScroll = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGUnload = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onSVGZoom = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontimeout = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontimeupdate = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontouchcancel = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontouchend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontouchenter = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontouchleave = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontouchmove = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontouchstart = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.ontransitionend = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onunload = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onupdateready = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onupgradeneeded = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onuserproximity = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onversionchange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onvisibilitychange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onvolumechange = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onwaiting = 'console.log(\'' + userControlledValue + '\');';
+hTMLElement.onwheel = 'console.log(\'' + userControlledValue + '\');';
 */

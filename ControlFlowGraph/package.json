@@ -2,6 +2,7 @@
   "name": "ControlFlowGraph",
   "main": "ControlFlowGraph.js",
   "dependencies": {
-    "acorn": "^0.5.0"
+    "acorn": "^0.5.0",
+    "string": "^1.9.0"
   }
 }

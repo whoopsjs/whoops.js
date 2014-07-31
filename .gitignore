@@ -1,6 +1,2 @@
 **/node_modules
 *.sublime-workspace
-
-# exclude files needed for visualization
-GraphVisualization/problems.js
-GraphVisualization/code.txt

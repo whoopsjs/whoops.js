@@ -9,7 +9,7 @@
 angular.module('graphVisualizationApp')
   .directive('filepicker', function () {
     return {
-      template: '<input type="file" />',
+      template: '<input type="file" class="form-control" />',
       restrict: 'E',
       scope: {
         'filesChanged': '&changed'

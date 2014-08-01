@@ -41,6 +41,7 @@ angular.module('graphVisualizationApp')
       }
 
       if ($routeParams.visualize) {
+        $scope.visualize = true;
         $http.get('http://localhost:3000/problems.json').success(dataReceived);
       } else {
         $scope.problems = null;

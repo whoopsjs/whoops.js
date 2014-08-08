@@ -123,7 +123,7 @@ program
         // set portnumber to listen to
         app.listen(portNumber);
 
-        // open('http://localhost:' + portNumber);
+        open('http://localhost:' + portNumber);
       }
     });
   });

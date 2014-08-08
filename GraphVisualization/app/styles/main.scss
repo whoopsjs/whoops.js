@@ -1,0 +1,29 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
+// endbower
+
+pre {
+  padding-left: 50px;
+  padding-bottom: 30px;
+  margin-top: 25px;
+}
+
+.line {
+  position: absolute !important;
+  color: rgba(0, 0, 0, 0.298039);
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+  margin-right: 20px;
+  margin-left: -50px;
+  display: block;
+  &.highlight {
+    cursor: pointer;
+    &.danger {
+      background-color: rgba(217, 83, 79, 0.3);
+    }
+    &.warning {
+      background-color: rgba(240,173,78, 0.3);
+    }
+  }
+}

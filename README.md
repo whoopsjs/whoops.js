@@ -23,6 +23,11 @@ This small tool will help you to find dangerous parts within your Javascript cod
     cd ..
     cd MainProgram
     npm install
+    cd ..
+    cd GraphVisualization
+    npm install
+    bower install
+    grunt build
     ```
 
 ## Test Your File

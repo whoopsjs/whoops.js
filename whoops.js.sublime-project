@@ -22,7 +22,7 @@
       "folder_exclude_patterns": [
         "MainProgram",
         "ControlFlowGraph",
-        "ToolTests"
+        "GraphVisualization"
       ]
     },
     {
@@ -40,14 +40,11 @@
       ]
     },
     {
-      "path": "ToolTests",
+      "path": "GraphVisualization",
       "folder_exclude_patterns":
       [
         "node_modules"
       ]
-    },
-    {
-      "path": "GraphVisualization"
     }
   ]
 }

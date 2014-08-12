@@ -3,9 +3,7 @@
 This small tool will help you to find dangerous parts within your Javascript code.
 
 ## Getting Started
-1. Download and install node.js
-
-    * [node.js download](http://nodejs.org/download/)
+1. Download and install [node.js](http://nodejs.org/download/)
 
 2. Download components from project
 

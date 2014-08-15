@@ -1,8 +1,6 @@
-## Welcome
-
 This small tool will help you to find dangerous parts within your Javascript code.
 
-## Getting Started
+# Getting Started
 1. Download and install [node.js](http://nodejs.org/download/)
 
 2. Download components from project
@@ -43,3 +41,6 @@ visualize <file>    open a visualization of the inspected file in a browser
 -h, --help          output usage information
 -g, --show-graph    Print the full control flow graph
 ```
+
+# Contributing
+Take a look at our wiki. Especially this page: [Contributing](https://github.com/whoopsjs/whoops.js/wiki/Contributing)
